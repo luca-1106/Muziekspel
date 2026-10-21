@@ -148,29 +148,38 @@ body.session-page {
 
 .session-page .now-playing {
   min-height: 0;
+  display: grid;
+  justify-items: center;
+  gap: clamp(2px, .6dvh, 6px);
   overflow: hidden;
 }
 
+.session-page .now-playing .track-year {
+  margin: 0;
+  color: var(--lime);
+  font: 700 clamp(30px, 10vw, 48px)/.9 'Space Grotesk', sans-serif;
+  letter-spacing: -1.5px;
+}
+
 .session-page .now-playing h2 {
-  margin-bottom: 2px;
-  font-size: clamp(18px, 5.6vw, 25px);
-  line-height: 1.08;
+  margin: 0;
+  font-size: clamp(24px, 7vw, 34px);
+  line-height: 1.02;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
 
-.session-page .now-playing p:not(.eyebrow) {
-  font-size: clamp(11px, 3.4vw, 14px);
+.session-page .now-playing .track-artist {
+  max-width: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(14px, 4.2vw, 18px);
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.session-page .spotify-link {
-  margin-top: 5px;
-  font-size: clamp(10px, 3vw, 12px);
 }
 
 .session-page .progress-wrap {
@@ -178,6 +187,7 @@ body.session-page {
 }
 
 .session-page .progress-meta {
+  justify-content: flex-end;
   margin-bottom: 6px;
 }
 
@@ -273,11 +283,7 @@ body.session-page {
   }
 
   .session-page .now-playing h2 {
-    font-size: clamp(17px, 5vw, 21px);
-  }
-
-  .session-page .spotify-link {
-    margin-top: 2px;
+    font-size: clamp(20px, 6vw, 26px);
   }
 
   .session-page .primary-button,
