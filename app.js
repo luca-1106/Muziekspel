@@ -48,8 +48,8 @@
   async function sha256(value) { return crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)); }
 
   async function spotifyLogin() {
-    clientId = SPOTIFY_CLIENT_ID;
-    if (!clientId || clientId === 'PASTE_YOUR_SPOTIFY_CLIENT_ID_HERE') { setConnection('De Spotify Client ID is nog niet ingesteld in app.js.'); return; }
+    clientId = SPOTIFY_CLIENT_ID.trim();
+    if (!clientId || clientId === 'PASTE_YOUR_SPOTIFY_CLIENT_ID_HERE') { setConnection('De eigenaar moet eerst de Spotify Client ID instellen in app.js.'); return; }
     const verifier = base64url(crypto.getRandomValues(new Uint8Array(64)));
     localStorage.setItem('spotify_code_verifier', verifier);
     const challenge = base64url(await sha256(verifier));
