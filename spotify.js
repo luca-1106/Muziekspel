@@ -3,6 +3,7 @@
   const clientId = (window.APP_CONFIG?.spotifyClientId || '').trim();
   const placeholder = 'PASTE_YOUR_SPOTIFY_CLIENT_ID_HERE';
   const authVersion = String(window.APP_CONFIG?.spotifyAuthVersion || '1');
+  const authVersionKey = 'muziekmix.spotify.authVersion';
   const keys = { access: 'muziekmix.spotify.access', expiry: 'muziekmix.spotify.expiry', refresh: 'muziekmix.spotify.refresh', verifier: 'muziekmix.spotify.verifier', state: 'muziekmix.spotify.state' };
   let accessToken = localStorage.getItem(keys.access) || '';
   let tokenExpiry = Number(localStorage.getItem(keys.expiry) || 0);
@@ -13,8 +14,13 @@
   const digest = value => crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
 
   function clear() { Object.values(keys).forEach(key => localStorage.removeItem(key)); accessToken = ''; tokenExpiry = 0; refreshToken = ''; }
-  if (localStorage.getItem('muziekmix.spotify.authVersion') !== authVersion) clear();
-  function save(data) { accessToken = data.access_token; tokenExpiry = Date.now() + Number(data.expires_in || 3600) * 1000; localStorage.setItem(keys.access, accessToken); localStorage.setItem(keys.expiry, String(tokenExpiry)); localStorage.setItem('muziekmix.spotify.authVersion', authVersion); if (data.refresh_token) { refreshToken = data.refresh_token; localStorage.setItem(keys.refresh, refreshToken); } }
+  if (localStorage.getItem(authVersionKey) !== authVersion) {
+    clear();
+    // Mark the migration as complete before OAuth starts. Otherwise the page
+    // reload after Spotify's redirect would delete the PKCE verifier and state.
+    localStorage.setItem(authVersionKey, authVersion);
+  }
+  function save(data) { accessToken = data.access_token; tokenExpiry = Date.now() + Number(data.expires_in || 3600) * 1000; localStorage.setItem(keys.access, accessToken); localStorage.setItem(keys.expiry, String(tokenExpiry)); localStorage.setItem(authVersionKey, authVersion); if (data.refresh_token) { refreshToken = data.refresh_token; localStorage.setItem(keys.refresh, refreshToken); } }
   async function tokenRequest(values) {
     const response = await fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(values) });
     const data = await response.json().catch(() => ({}));
@@ -43,6 +49,7 @@
   async function login() {
     if (!clientId || clientId === placeholder) throw new Error('De eigenaar moet eerst de Spotify Client ID invullen in config.js en opnieuw publiceren.');
     const verifier = random(64), state = random(24), challenge = base64url(await digest(verifier));
+    localStorage.setItem(authVersionKey, authVersion);
     localStorage.setItem(keys.verifier, verifier); localStorage.setItem(keys.state, state);
     const params = new URLSearchParams({ client_id: clientId, response_type: 'code', redirect_uri: redirectUri, code_challenge_method: 'S256', code_challenge: challenge, state, scope: 'streaming user-modify-playback-state user-read-playback-state' });
     window.location.assign(`https://accounts.spotify.com/authorize?${params}`);
