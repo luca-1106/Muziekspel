@@ -1,4 +1,7 @@
 (() => {
+  // Public Spotify Client ID goes here. Never put a Client Secret in this file.
+  const SPOTIFY_CLIENT_ID = 'PASTE_YOUR_SPOTIFY_CLIENT_ID_HERE';
+
   const playButton = document.querySelector('#playButton');
   const revealButton = document.querySelector('#revealButton');
   const answerCard = document.querySelector('#answerCard');
@@ -14,7 +17,6 @@
   const clipLength = document.querySelector('#clipLength');
   const clipLengthValue = document.querySelector('#clipLengthValue');
   const autoStop = document.querySelector('#autoStop');
-  const clientIdInput = document.querySelector('#spotifyClientId');
   const connectButton = document.querySelector('#connectSpotify');
   const connectionText = document.querySelector('#spotifyConnection');
 
@@ -31,9 +33,8 @@
   let accessToken = localStorage.getItem('spotify_access_token') || '';
   let tokenExpiry = Number(localStorage.getItem('spotify_token_expiry') || 0);
   let refreshToken = localStorage.getItem('spotify_refresh_token') || '';
-  let clientId = localStorage.getItem('spotify_client_id') || '';
+  let clientId = SPOTIFY_CLIENT_ID;
   const redirectUri = window.location.origin + window.location.pathname;
-  clientIdInput.value = clientId;
 
   function setStatus(text, instructionText, playing = false) {
     statusText.textContent = text; instruction.textContent = instructionText;
@@ -47,9 +48,8 @@
   async function sha256(value) { return crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)); }
 
   async function spotifyLogin() {
-    clientId = clientIdInput.value.trim();
-    if (!clientId) { setConnection('Vul eerst je Spotify Client ID in.'); return; }
-    localStorage.setItem('spotify_client_id', clientId);
+    clientId = SPOTIFY_CLIENT_ID;
+    if (!clientId || clientId === 'PASTE_YOUR_SPOTIFY_CLIENT_ID_HERE') { setConnection('De Spotify Client ID is nog niet ingesteld in app.js.'); return; }
     const verifier = base64url(crypto.getRandomValues(new Uint8Array(64)));
     localStorage.setItem('spotify_code_verifier', verifier);
     const challenge = base64url(await sha256(verifier));
