@@ -1,57 +1,19 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#121411">
-  <meta name="description" content="Een eenvoudige Spotify-randomizer per muziekgenre.">
-  <title>Muziekmix</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121411"><meta name="description" content="Start een Spotify-sessie per muziekgenre.">
+  <title>Muziekmix</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="landing-page">
   <main class="app-shell">
-    <header class="topbar">
-      <div class="brand-mark" aria-hidden="true">♫</div>
-      <div><p class="eyebrow">JOUW EIGEN MUZIEKMIX</p><h1>Muziekmix<span>.</span></h1></div>
-      <button id="settingsToggle" class="icon-button" aria-label="Instellingen" title="Instellingen">⚙</button>
-    </header>
-    <section class="intro" aria-live="polite">
-      <div class="status-line"><span id="statusDot" class="status-dot"></span><span id="statusText">Kies een genre om te beginnen.</span></div>
-      <p id="instruction">Koppel je Spotify-account en start daarna een sessie.</p>
-    </section>
-    <section class="connection-card" aria-label="Spotify-verbinding">
-      <div id="connectionIcon" class="connection-icon" aria-hidden="true">♫</div>
-      <div class="connection-copy"><strong id="spotifyConnection">Spotify niet gekoppeld</strong><span id="connectionDetail">Koppel je eigen account om af te spelen.</span></div>
-      <button id="connectSpotify" class="secondary-button compact-button" type="button">Koppelen</button>
-    </section>
-    <section class="genre-picker" aria-label="Kies een muziekgenre">
-      <div class="genre-heading"><span class="eyebrow">KIES JE MUZIEK</span><span id="genreCount" class="genre-count"></span></div>
-      <div class="genre-options" role="group" aria-label="Genres">
-        <button class="genre-button active" data-genre="alles" aria-pressed="true">Alles</button>
-        <button class="genre-button" data-genre="yachterock" aria-pressed="false">Yachtrock</button>
-        <button class="genre-button" data-genre="rock" aria-pressed="false">Rock</button>
-        <button class="genre-button" data-genre="disco" aria-pressed="false">Disco</button>
-        <button class="genre-button" data-genre="gitaarmuziek" aria-pressed="false">Gitaarmuziek</button>
-        <button class="genre-button" data-genre="nederlands" aria-pressed="false">Nederlands</button>
-      </div>
-    </section>
-    <section class="player-card" aria-label="Spotify-speler">
-      <div class="album-wrap"><img id="albumArt" class="album-art" alt="Albumhoes" hidden><div id="albumFallback" class="vinyl" aria-hidden="true"><div class="vinyl-label">♫</div></div></div>
-      <div class="now-playing"><p class="eyebrow">NU AAN HET SPELEN</p><h2 id="trackTitle">Nog geen sessie gestart</h2><p id="trackArtist">Koppel Spotify en kies Start sessie.</p><a id="trackLink" class="spotify-link" href="https://open.spotify.com" target="_blank" rel="noopener" hidden>Open in Spotify ↗</a></div>
-      <div class="progress-wrap"><div class="progress-meta"><span id="playState">KLAAR</span><span id="timeLabel">0:00</span></div><div class="progress-track"><div id="progressBar" class="progress-bar"></div></div></div>
-      <p id="errorMessage" class="error-message" role="alert" hidden></p>
-      <div class="controls"><button id="sessionButton" class="primary-button" type="button"><span class="button-icon">▶</span><span>Start sessie</span></button><button id="pauseButton" class="secondary-button" type="button" disabled><span class="button-icon">Ⅱ</span><span>Pauzeer</span></button><button id="nextButton" class="secondary-button full-control" type="button" disabled><span class="button-icon">↷</span><span>Volgend nummer</span></button></div>
-      <p class="small-note">Nummers worden via Spotify op je actieve apparaat afgespeeld.</p>
-    </section>
+    <header class="topbar"><div class="brand-mark" aria-hidden="true">♫</div><div><p class="eyebrow">JOUW EIGEN MUZIEKMIX</p><h1>Muziekmix<span>.</span></h1></div></header>
+    <section class="intro" aria-live="polite"><div class="status-line"><span id="statusDot" class="status-dot"></span><span id="statusText">Klaar voor een nieuwe sessie.</span></div><p id="instruction">Kies een genre, koppel Spotify en start je sessie.</p></section>
+    <section class="connection-card" aria-label="Spotify-verbinding"><div id="connectionIcon" class="connection-icon" aria-hidden="true">♫</div><div class="connection-copy"><strong id="spotifyConnection">Spotify niet gekoppeld</strong><span id="connectionDetail">Koppel je eigen account om af te spelen.</span></div><button id="connectSpotify" class="secondary-button compact-button" type="button">Koppelen</button><button id="disconnectSpotify" class="text-button" type="button" hidden>Ontkoppel</button></section>
+    <section class="genre-picker" aria-label="Kies een muziekgenre"><div class="genre-heading"><span class="eyebrow">KIES JE MUZIEK</span><span id="genreCount" class="genre-count"></span></div><div class="genre-options" role="group" aria-label="Genres"><button class="genre-button active" data-genre="alles" aria-pressed="true">Alles</button><button class="genre-button" data-genre="yachterock" aria-pressed="false">Yachtrock</button><button class="genre-button" data-genre="rock" aria-pressed="false">Rock</button><button class="genre-button" data-genre="disco" aria-pressed="false">Disco</button><button class="genre-button" data-genre="gitaarmuziek" aria-pressed="false">Gitaarmuziek</button><button class="genre-button" data-genre="nederlands" aria-pressed="false">Nederlands</button></div></section>
+    <section class="start-card"><div class="vinyl small-vinyl" aria-hidden="true"><div class="vinyl-label">♫</div></div><h2>Start een sessie</h2><p>Er wordt alleen uit je gekozen genre gespeeld. Een nummer komt niet twee keer voorbij in dezelfde sessie.</p><button id="startSession" class="primary-button full-button" type="button"><span class="button-icon">▶</span><span>Start sessie</span></button><p id="errorMessage" class="error-message" role="alert" hidden></p></section>
     <footer><span>Spotify-randomizer</span><span id="trackCount">0 nummers beschikbaar</span></footer>
   </main>
-  <dialog id="settingsDialog" class="settings-dialog">
-    <form method="dialog" class="dialog-header"><div><p class="eyebrow">INSTELLINGEN</p><h2>Spotify</h2></div><button class="icon-button" aria-label="Sluiten">×</button></form>
-    <div class="dialog-body"><p id="settingsConnection">Spotify is niet gekoppeld.</p><button id="settingsConnect" class="secondary-button full-button" type="button">Koppel Spotify</button><button id="disconnectSpotify" class="danger-button full-button" type="button" hidden>Spotify ontkoppelen</button><div class="settings-hint">Je accountgegevens en tokens blijven alleen in deze browser opgeslagen. Spotify Premium en een actief Spotify-apparaat zijn nodig om afspelen te bedienen.</div></div>
-    <div class="dialog-actions"><button id="closeSettings" class="primary-button">Gereed</button></div>
-  </dialog>
-  <script src="config.js"></script><script src="tracks.js"></script><script src="app.js"></script>
+  <script src="config.js"></script><script src="tracks.js"></script><script src="spotify.js"></script><script src="app.js"></script>
 </body>
 </html>

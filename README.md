@@ -18,8 +18,9 @@ De Client ID is openbaar en kan veilig in `config.js` staan. Zet **nooit** een C
 1. Kies een genre.
 2. Druk op **Koppelen** en log in met je eigen Spotify-account.
 3. Open Spotify op de telefoon, computer of speaker waarop je wilt luisteren en maak dat apparaat actief.
-4. Druk op **Start sessie**. De app kiest en speelt een willekeurig nummer uit het geselecteerde genre.
-5. Gebruik **Pauzeer**, **Verder luisteren** en **Volgend nummer**. Na de laatste track toont de app dat de sessie is afgerond; **Nieuwe sessie** start weer met een lege sessielijst.
+4. Druk op **Start sessie**. Er opent een aparte sessiepagina en de app start daar direct een willekeurig nummer uit het geselecteerde genre.
+5. Gebruik **Pauzeer**, **Verder luisteren** en **Volgend nummer**. De teller op de sessiepagina toont je voortgang; geen nummer wordt binnen die sessie herhaald.
+6. Kies **Sessie beëindigen** om terug te gaan naar de genreselectie en een nieuwe sessie te starten.
 
 ## Spotify-vereisten en privacy
 
@@ -49,4 +50,4 @@ Zonder URI zoekt de app naar een exacte titel- en artiestmatch en weigert zij du
 
 ## Controle
 
-De code is statisch gecontroleerd op OAuth-PKCE met state-validatie, tokenverversing, sessiereset, genrefiltering, non-repeat selectie, zichtbare verbindingsstatus en foutmeldingen. Live OAuth en Spotify-afspelen moeten na het instellen van jouw Client ID, Redirect URI en Premium-account nog in de gepubliceerde app worden getest.
+De code is statisch gecontroleerd op OAuth-PKCE met state-validatie, tokenverversing, de overgang van startpagina naar sessiepagina, genrefiltering, non-repeat selectie, zichtbare verbindingsstatus en foutmeldingen. Live OAuth en Spotify-afspelen moeten na het instellen van jouw Client ID, Redirect URI en Premium-account nog in de gepubliceerde app worden getest.
