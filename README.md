@@ -15,15 +15,19 @@ Mobiele webapp voor een muziek-tijdlijnspel. De Play-knop start een willekeurige
 2. Open **Settings → Pages** en kies `Deploy from a branch`, branch `main`, map `/ (root)`.
 3. Wacht tot GitHub de website publiceert. Kopieer de volledige website-URL, inclusief eventuele repository-submap.
 
-## Spotify instellen
-1. Open https://developer.spotify.com/dashboard en maak een app aan.
-2. Kopieer de **Client ID**.
-3. Open in Spotify Developer Dashboard de instellingen van de app en voeg de volledige GitHub Pages-URL toe als **Redirect URI**. Deze moet exact overeenkomen met de URL in de adresbalk, inclusief pad en afsluitende slash als die er is. Gebruik HTTPS.
-4. Open de website op je telefoon, ga naar ⚙ Instellingen, plak de Client ID en druk op **Koppel Spotify**.
-5. Log in met Spotify en geef toestemming.
-6. Open Spotify op je telefoon of kies een apparaat via Spotify Connect. Probeer daarna Play in de webapp.
+## Spotify instellen voor een klein groepje vrienden
+1. Open https://developer.spotify.com/dashboard en open je Spotify Developer-app (of maak er een aan).
+2. Kopieer de **Client ID** en open `app.js` in GitHub.
+3. Vervang `PASTE_YOUR_SPOTIFY_CLIENT_ID_HERE` in `const SPOTIFY_CLIENT_ID = '...'` door je Client ID. Zet **nooit** de Client Secret in de code.
+4. Open de Spotify Developer-app-instellingen en voeg de exacte GitHub Pages-URL toe als **Redirect URI**. Gebruik HTTPS en neem het volledige pad van de website over.
+5. Open in de Developer Dashboard de gebruikers-/allowlist-instellingen en voeg de Spotify-accounts van je vrienden toe (meestal het e-mailadres dat aan hun Spotify-account is gekoppeld). Development Mode staat momenteel maximaal vijf geautoriseerde gebruikers toe, inclusief de eigenaar.
+6. Wacht tot GitHub Pages de wijziging heeft gepubliceerd.
+7. Jij en je vrienden openen de website, gaan naar ⚙ Instellingen en drukken op **Koppel Spotify**. Iedereen logt in met het eigen Spotify-account en geeft toestemming.
+8. Start de Spotify-app op de telefoon of speaker die je wilt gebruiken en druk daarna op Play in het muziekspel.
 
-De website gebruikt OAuth Authorization Code met PKCE; er staat geen Client Secret in de code. Toegangstokens worden in de browser opgeslagen.
+De website gebruikt OAuth Authorization Code met PKCE; er staat geen Client Secret in de code. Tokens worden per gebruiker in diens eigen browser opgeslagen. De Client ID is geen geheim. Deel nooit access tokens, refresh tokens of je Spotify-wachtwoord.
+
+**Belangrijk:** Spotify's huidige Developer Policy verbiedt apps die games of triviaquizzen maken. Dit muziekspel valt daar waarschijnlijk onder; Spotify kan toegang weigeren of intrekken. Controleer de actuele beleidsregels voordat je het met vrienden gebruikt.
 
 ## Nummers toevoegen
 Bewerk `tracks.js`. Gebruik per nummer:
