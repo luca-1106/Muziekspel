@@ -6,9 +6,17 @@
   const sourceTracks = Array.isArray(window.TRACKS) ? window.TRACKS.filter(track => track?.title && track?.artist) : [];
   const key = track => `${track.title}\u0000${track.artist}`.toLowerCase();
   const normalise = value => String(value || '').toLocaleLowerCase('nl').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  const normaliseTitle = value => normalise(value)
+    .replace(/\b\d{4}\s+remaster(?:ed)?\b/g, '')
+    .replace(/\bremaster(?:ed)?(?:\s+\d{4})?\b/g, '')
+    .replace(/\b(?:radio|single|album)\s+(?:edit|version|mix)\b/g, '')
+    .replace(/\boriginal\s+(?:version|mix|recording)\b/g, '')
+    .replace(/\s+/g, ' ').trim();
+  const normaliseArtist = value => normalise(value).replace(/^the\s+/, '').replace(/\s+(feat|featuring|ft)\s+.*$/, '').trim();
+  const overlap = (left, right) => { const wanted = new Set(left.split(' ').filter(Boolean)); const found = new Set(right.split(' ').filter(Boolean)); return wanted.size ? [...wanted].filter(word => found.has(word)).length / wanted.size : 0; };
   const matchesGenre = track => genre === 'alles' || (Array.isArray(track.genres) ? track.genres.includes(genre) : track.genre === genre);
   const tracks = [...new Map(sourceTracks.filter(matchesGenre).map(track => [key(track), track])).values()];
-  let player, browserDeviceId = '', pendingTrack, currentTrack, playerState, stateUpdatedAt = 0, used = new Set(), isPlaying = false, progressTimer;
+  let player, browserDeviceId = '', pendingTrack, currentTrack, playerState, stateUpdatedAt = 0, used = new Set(), unavailable = new Set(), isPlaying = false, progressTimer;
 
   const setError = message => { $('#errorMessage').textContent = message || ''; $('#errorMessage').hidden = !message; };
   const setStatus = (title, detail, active = false) => { $('#statusText').textContent = title; $('#instruction').textContent = detail; $('#statusDot').classList.toggle('active', active); };
@@ -18,10 +26,38 @@
   const updateCount = () => { $('#sessionCount').textContent = `${used.size} / ${tracks.length}`; };
   function updateProgress() { if (!playerState) return; const duration = Math.max(1, (playerState.duration || currentTrack?.duration_ms || 0) / 1000); const elapsed = (playerState.position || 0) / 1000 + (isPlaying ? (Date.now() - stateUpdatedAt) / 1000 : 0); $('#timeLabel').textContent = `${formatTime(elapsed)} / ${formatTime(duration)}`; $('#progressBar').style.width = `${Math.min(100, elapsed / duration * 100)}%`; }
   function startTimer() { clearInterval(progressTimer); updateProgress(); progressTimer = setInterval(updateProgress, 500); }
-  function score(item, source) { const artists = item.artists?.map(person => normalise(person.name)) || []; if (normalise(item.name) !== normalise(source.title) || !artists.includes(normalise(source.artist))) return -Infinity; return /(live|karaoke|tribute|cover|instrumental)/.test(normalise(`${item.name} ${item.album?.name || ''}`)) ? 0 : 100; }
-  async function resolve(source) { if (source.spotifyUri?.startsWith('spotify:track:')) return window.SpotifyApp.request(`/tracks/${encodeURIComponent(source.spotifyUri.slice(14))}`); const result = await window.SpotifyApp.request(`/search?q=${encodeURIComponent(`track:${source.title} artist:${source.artist}`)}&type=track&limit=10`); const found = (result.tracks?.items || []).map(item => ({ item, score: score(item, source) })).filter(candidate => candidate.score > 0).sort((a, b) => b.score - a.score)[0]?.item; if (!found) throw new Error(`Geen betrouwbare Spotify-versie gevonden voor ${source.title} van ${source.artist}.`); return found; }
+  function score(item, source) {
+    const wantedTitle = normaliseTitle(source.title), foundTitle = normaliseTitle(item.name);
+    const wantedArtist = normaliseArtist(source.artist);
+    const artistNames = item.artists?.map(person => normaliseArtist(person.name)) || [];
+    const combinedArtists = normaliseArtist(item.artists?.map(person => person.name).join(' ') || '');
+    const titleMatch = wantedTitle === foundTitle ? 100 : (overlap(wantedTitle, foundTitle) >= 0.8 && overlap(foundTitle, wantedTitle) >= 0.6 ? 70 : 0);
+    const artistMatch = artistNames.includes(wantedArtist) || combinedArtists === wantedArtist ? 50 : (overlap(wantedArtist, combinedArtists) >= 0.8 && overlap(combinedArtists, wantedArtist) >= 0.6 ? 35 : 0);
+    const unwantedVersion = /(live|karaoke|tribute|cover|instrumental|re recorded)/.test(normalise(`${item.name} ${item.album?.name || ''}`)) && !/(live|karaoke|tribute|cover|instrumental|re recorded)/.test(wantedTitle);
+    return titleMatch && artistMatch && !unwantedVersion ? titleMatch + artistMatch : -Infinity;
+  }
+  async function resolve(source) {
+    if (source.spotifyUri?.startsWith('spotify:track:')) return window.SpotifyApp.request(`/tracks/${encodeURIComponent(source.spotifyUri.slice(14))}`);
+    const queries = [`track:${source.title} artist:${source.artist}`, `${source.title} ${source.artist}`];
+    for (const query of queries) {
+      const result = await window.SpotifyApp.request(`/search?q=${encodeURIComponent(query)}&type=track&limit=10`);
+      const found = (result.tracks?.items || []).map(item => ({ item, score: score(item, source) })).filter(candidate => candidate.score > 0).sort((a, b) => b.score - a.score)[0]?.item;
+      if (found) return found;
+    }
+    const error = new Error(`Geen betrouwbare Spotify-versie gevonden voor ${source.title} van ${source.artist}.`);
+    error.code = 'TRACK_NOT_FOUND';
+    throw error;
+  }
   function renderTrack(track) { $('#trackTitle').textContent = track.name; $('#trackArtist').textContent = track.artists.map(person => person.name).join(', '); $('#trackLink').href = track.external_urls?.spotify || 'https://open.spotify.com'; $('#trackLink').hidden = false; const image = track.album?.images?.[0]?.url; $('#albumArt').hidden = !image; $('#albumFallback').hidden = Boolean(image); if (image) { $('#albumArt').src = image; $('#albumArt').alt = `Albumhoes: ${track.album.name}`; } }
-  async function prepareTrack() { const candidates = tracks.filter(track => !used.has(key(track))); if (!candidates.length) throw new Error('Alle nummers in deze sessie zijn afgespeeld.'); const source = candidates[Math.floor(Math.random() * candidates.length)]; const spotify = await resolve(source); pendingTrack = { source, spotify }; renderTrack(spotify); }
+  async function prepareTrack() {
+    const candidates = tracks.filter(track => !used.has(key(track)) && !unavailable.has(key(track))).sort(() => Math.random() - 0.5);
+    if (!candidates.length) throw new Error('Alle beschikbare nummers in deze sessie zijn afgespeeld.');
+    for (const source of candidates.slice(0, 10)) {
+      try { const spotify = await resolve(source); pendingTrack = { source, spotify }; renderTrack(spotify); return; }
+      catch (error) { if (error.code !== 'TRACK_NOT_FOUND') throw error; unavailable.add(key(source)); }
+    }
+    throw new Error('Spotify kon meerdere nummers niet betrouwbaar koppelen. Probeer Volgend nummer opnieuw.');
+  }
   async function waitForTrack(uri) { for (let attempt = 0; attempt < 30; attempt += 1) { if (playerState?.track_window?.current_track?.uri === uri && !playerState.paused) return; await wait(150); } throw new Error('Safari kon de Spotify-audio niet starten. Koppel Spotify opnieuw en probeer daarna nogmaals.'); }
   async function playPending() { if (!pendingTrack) await prepareTrack(); await player.activateElement(); await window.SpotifyApp.request(`/me/player/play?device_id=${encodeURIComponent(browserDeviceId)}`, 'PUT', { uris: [pendingTrack.spotify.uri] }); await player.resume(); await waitForTrack(pendingTrack.spotify.uri); currentTrack = pendingTrack.spotify; used.add(key(pendingTrack.source)); pendingTrack = null; isPlaying = true; updateCount(); startTimer(); $('#startPlayback').hidden = true; $('#pauseButton').disabled = false; $('#nextButton').disabled = false; setPauseButton('Ⅱ', 'Pauzeer'); $('#playState').textContent = 'NU AAN HET SPELEN'; setStatus('Sessie actief', `${used.size} van ${tracks.length} nummers afgespeeld.`, true); }
   async function nextTrack() { await prepareTrack(); await playPending(); }
