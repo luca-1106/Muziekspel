@@ -1,0 +1,10 @@
+{
+  "name": "Tijdlijn — Muziekspel",
+  "short_name": "Tijdlijn",
+  "description": "Een muziek-tijdlijnspel voor vrienden.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121411",
+  "theme_color": "#121411",
+  "icons": [{ "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

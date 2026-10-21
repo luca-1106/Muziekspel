@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#121411" />
+  <meta name="description" content="Een muziek-tijdlijnspel voor vrienden. Luister, raad het jaar en onthul het antwoord." />
+  <title>Tijdlijn — Muziekspel</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">♫</div>
+      <div><p class="eyebrow">HET MUZIEK-TIJDSLIJNSPEL</p><h1>Tijdlijn<span>.</span></h1></div>
+      <button id="settingsToggle" class="icon-button" aria-label="Spelinstellingen" title="Spelinstellingen">⚙</button>
+    </header>
+
+    <section class="intro" aria-live="polite">
+      <div class="status-line"><span id="statusDot" class="status-dot"></span><span id="statusText">Klaar voor de volgende track?</span></div>
+      <p id="instruction">Druk op play, luister en leg je fiche op de juiste plek in de tijdlijn.</p>
+    </section>
+
+    <section class="genre-picker" aria-label="Kies een muziekgenre">
+      <div class="genre-heading"><span class="eyebrow">KIES JE MUZIEK</span><span id="genreCount" class="genre-count"></span></div>
+      <div class="genre-options" role="group" aria-label="Genres">
+        <button class="genre-button active" data-genre="alles" aria-pressed="true">Alles</button>
+        <button class="genre-button" data-genre="yachterock" aria-pressed="false">Yachtrock</button>
+        <button class="genre-button" data-genre="rock" aria-pressed="false">Rock</button>
+        <button class="genre-button" data-genre="disco" aria-pressed="false">Disco</button>
+        <button class="genre-button" data-genre="gitaarmuziek" aria-pressed="false">Gitaarmuziek</button>
+        <button class="genre-button" data-genre="nederlands" aria-pressed="false">Nederlands</button>
+      </div>
+    </section>
+
+    <section class="player-card" aria-label="Muziekspeler">
+      <div class="vinyl-wrap" id="vinylWrap" aria-hidden="true"><div class="vinyl"><div class="vinyl-label">♫</div></div></div>
+      <div class="track-hidden" id="trackHidden"><span class="lock-icon">♫</span><span>Welke track is dit?</span><small>Titel en artiest blijven geheim</small></div>
+      <div class="progress-wrap"><div class="progress-meta"><span id="playState">WACHT OP PLAY</span><span id="timeLabel">0:00</span></div><div class="progress-track"><div id="progressBar" class="progress-bar"></div></div></div>
+      
+      <p id="errorMessage" class="error-message" role="alert" hidden></p>
+      <div class="controls">
+        <button id="playButton" class="primary-button"><span class="button-icon">▶</span><span>Play</span></button>
+        <button id="revealButton" class="secondary-button" disabled><span class="button-icon">✦</span><span>Onthul antwoord</span></button>
+      </div>
+      <p class="small-note">Zet het volume goed. De track wordt afgespeeld zonder titel of artiest te tonen.</p>
+    </section>
+
+    <section id="answerCard" class="answer-card" hidden aria-live="polite">
+      <div class="answer-kicker">HET JUISTE ANTWOORD</div>
+      <p id="answerYear" class="answer-year">1998</p>
+      <h2 id="answerTitle">Tracktitel</h2>
+      <p id="answerArtist">Artiest</p>
+      <div class="answer-tip">✍️ Schrijf het jaartal op een sticky note en voeg deze toe aan de tijdlijn.</div>
+    </section>
+
+    <section class="how-to">
+      <div class="step-number">01</div><div><strong>Luister</strong><p>Druk op play en herken het nummer.</p></div>
+      <div class="step-number">02</div><div><strong>Plaats je fiche</strong><p>Leg je fiche vóór, na of tussen de jaartallen.</p></div>
+      <div class="step-number">03</div><div><strong>Onthul</strong><p>Check het jaartal en schrijf het op een sticky note.</p></div>
+    </section>
+
+    <footer><span>Gemaakt voor een avond vol muziek.</span><span id="trackCount">0 tracks ingesteld</span></footer>
+  </main>
+
+  <dialog id="settingsDialog" class="settings-dialog">
+    <form method="dialog" class="dialog-header"><div><p class="eyebrow">INSTELLINGEN</p><h2>Spelinstellingen</h2></div><button class="icon-button" aria-label="Sluiten">✕</button></form>
+    <div class="dialog-body">
+      <p>Stel in hoelang elk nummer speelt voordat het stopt. De antwoorden blijven verborgen totdat iemand op <strong>Onthul antwoord</strong> drukt.</p>
+      <label for="clipLength">Speelduur per nummer <strong><span id="clipLengthValue">25</span> sec.</strong></label>
+      <input id="clipLength" type="range" min="10" max="60" step="5" value="25" />
+      <label class="check-label"><input id="autoStop" type="checkbox" checked /> Stop automatisch na de ingestelde speelduur</label>
+      <hr class="settings-divider" />
+      <h3>Spotify koppelen</h3>
+      <p>Je hebt Spotify Premium en een gratis Spotify Developer-app nodig. De Client ID vul je hieronder in.</p>
+      <label for="spotifyClientId">Spotify Client ID</label>
+      <input id="spotifyClientId" class="text-input" type="text" placeholder="Plak hier je Client ID" autocomplete="off" />
+      <button id="connectSpotify" class="secondary-button full-button" type="button">Koppel Spotify</button>
+      <p id="spotifyConnection" class="connection-status">Spotify is nog niet gekoppeld.</p>
+      <div class="settings-hint">De ingebouwde catalogus bevat nummers per genre. Bij het afspelen zoekt de app de track op Spotify op basis van titel en artiest. De app bedient je actieve Spotify-apparaat; start Spotify eerst op je telefoon of speaker.</div>
+    </div>
+    <div class="dialog-actions"><button id="closeSettings" class="primary-button">Gereed</button></div>
+  </dialog>
+  <script src="tracks.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
