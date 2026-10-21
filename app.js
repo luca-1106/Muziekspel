@@ -13,7 +13,6 @@
   function renderGenres() {
     const count = pool().length;
     $('#genreCount').textContent = `${count} nummers`;
-    $('#trackCount').textContent = `${count} nummers beschikbaar`;
     document.querySelectorAll('.genre-button').forEach(button => { const active = button.dataset.genre === selectedGenre; button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active)); });
   }
   function renderConnection(profile) {
