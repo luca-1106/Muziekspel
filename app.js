@@ -32,7 +32,7 @@
     if (!window.SpotifyApp.hasSession()) { await window.SpotifyApp.login(); return; }
     await window.SpotifyApp.token();
     sessionStorage.setItem('muziekmix.session.genre', selectedGenre);
-    window.location.assign('session.html?v=progress-only-1');
+    window.location.assign('session.html?v=centered-source-1');
   }));
   (async () => { renderGenres(); renderConnection(null); try { await window.SpotifyApp.handleCallback(); } catch (error) { setError(error.message); } await refreshConnection(); })();
 })();

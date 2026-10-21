@@ -49,7 +49,7 @@ body.session-page {
   padding: clamp(10px, 2dvh, 18px) clamp(12px, 4vw, 20px);
   border-radius: clamp(18px, 5vw, 25px);
   display: grid;
-  grid-template-rows: minmax(76px, 1fr) auto auto auto auto;
+  grid-template-rows: minmax(0, 1fr) auto auto auto;
   align-content: stretch;
   gap: clamp(5px, 1dvh, 10px);
   overflow: hidden;
@@ -70,8 +70,9 @@ body.session-page {
   display: none;
 }
 
-.session-page .player-card.awaiting-playback .album-wrap {
+.session-page .player-card.awaiting-playback .track-display {
   grid-row: 1;
+  transform: none;
 }
 
 .session-page .player-card.awaiting-playback .error-message {
@@ -83,6 +84,17 @@ body.session-page {
   grid-row: 3;
   display: block;
   text-align: center;
+}
+
+.session-page .track-display {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(8px, 1.6dvh, 16px);
+  transform: translateY(-5dvh);
+  overflow: hidden;
 }
 
 .session-page .album-wrap {
@@ -177,13 +189,14 @@ body.session-page {
   color: var(--muted);
   font-size: clamp(14px, 4.2vw, 18px);
   line-height: 1.2;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .session-page .progress-wrap {
-  margin: 0;
+  margin: clamp(20px, 3.2dvh, 34px) 0 clamp(12px, 2dvh, 22px);
 }
 
 .session-page .error-message {
@@ -257,8 +270,17 @@ body.session-page {
 
   .session-page .player-card {
     padding: 8px 10px;
-    grid-template-rows: minmax(66px, 1fr) auto auto auto;
+    grid-template-rows: minmax(0, 1fr) auto auto auto;
     gap: 4px;
+  }
+
+  .session-page .track-display {
+    gap: 6px;
+  }
+
+  .session-page .progress-wrap {
+    margin-top: 12px;
+    margin-bottom: 8px;
   }
 
   .session-page .album-art,
@@ -297,7 +319,7 @@ body.session-page {
   }
 
   .session-page .player-card {
-    grid-template-rows: minmax(58px, 1fr) auto auto auto;
+    grid-template-rows: minmax(0, 1fr) auto auto auto;
   }
 
   .session-page .album-art,
