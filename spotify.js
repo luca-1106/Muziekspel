@@ -6,7 +6,7 @@
   let accessToken = localStorage.getItem(keys.access) || '';
   let tokenExpiry = Number(localStorage.getItem(keys.expiry) || 0);
   let refreshToken = localStorage.getItem(keys.refresh) || '';
-  const redirectUri = `${window.location.origin}${window.location.pathname}`;
+  const redirectUri = (window.APP_CONFIG?.spotifyRedirectUri || `${window.location.origin}${window.location.pathname}`).trim();
   const base64url = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
   const random = length => base64url(crypto.getRandomValues(new Uint8Array(length)));
   const digest = value => crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
