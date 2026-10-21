@@ -1,7 +1,7 @@
 {
-  "name": "Tijdlijn — Muziekspel",
-  "short_name": "Tijdlijn",
-  "description": "Een muziek-tijdlijnspel voor vrienden.",
+  "name": "Muziekmix",
+  "short_name": "Muziekmix",
+  "description": "Een Spotify-randomizer per muziekgenre.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#121411",

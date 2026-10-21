@@ -1,71 +1,52 @@
-# Tijdlijn — Muziekspel met Spotify
+# Muziekmix
 
-Mobiele webapp voor een muziek-tijdlijnspel. De Play-knop start een willekeurige track via de Spotify Web API; titel, artiest en jaartal worden in de app pas zichtbaar na **Onthul antwoord**.
+Een mobiele Spotify-randomizer. Kies een genre, koppel je eigen Spotify-account en start een sessie. De app speelt uitsluitend nummers uit het gekozen genre en herhaalt binnen die sessie geen nummer.
 
-## Benodigd
-- Een Spotify Premium-account.
-- Een gratis Spotify Developer-app en de Client ID daarvan.
-- Een actief Spotify-apparaat (bijvoorbeeld de Spotify-app op je telefoon of een Spotify Connect-speaker).
-- GitHub Pages of een andere HTTPS-hosting voor de website.
+Titel, artiest, albumhoes en een link naar Spotify zijn zichtbaar tijdens het afspelen. Dat is nodig voor een Spotify-streamingintegratie.
 
-> Let op: Spotify's Developer Policy verbiedt integratie in games/triviaquizzen. Deze technische demo is niet officieel goedgekeurd door Spotify; gebruik is op eigen verantwoordelijkheid. API-toegang kan door Spotify worden beperkt.
+## Voor je publiceert
 
-## Publiceren op GitHub Pages
-1. Upload alle bestanden in deze map naar de hoofdmap van een GitHub-repository.
-2. Open **Settings → Pages** en kies `Deploy from a branch`, branch `main`, map `/ (root)`.
-3. Wacht tot GitHub de website publiceert. Kopieer de volledige website-URL, inclusief eventuele repository-submap.
+1. Maak of open een app in het [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
+2. Kopieer de **Client ID** naar `config.js`, bij `spotifyClientId`.
+3. Voeg de precieze publieke URL van de app toe als Redirect URI in het Spotify Developer Dashboard. Voor GitHub Pages is dat bijvoorbeeld `https://jouw-gebruikersnaam.github.io/Muziekspel/`.
+4. Publiceer alle bestanden naar GitHub Pages via **Settings → Pages → Deploy from a branch → main → /(root)**.
 
-## Spotify instellen voor een klein groepje vrienden
-1. Open https://developer.spotify.com/dashboard en open je Spotify Developer-app (of maak er een aan).
-2. Kopieer de **Client ID** en open `app.js` in GitHub.
-3. Vervang `PASTE_YOUR_SPOTIFY_CLIENT_ID_HERE` in `const SPOTIFY_CLIENT_ID = '...'` door je Client ID. Zet **nooit** de Client Secret in de code.
-4. Open de Spotify Developer-app-instellingen en voeg de exacte GitHub Pages-URL toe als **Redirect URI**. Gebruik HTTPS en neem het volledige pad van de website over.
-5. Open in de Developer Dashboard de gebruikers-/allowlist-instellingen en voeg de Spotify-accounts van je vrienden toe (meestal het e-mailadres dat aan hun Spotify-account is gekoppeld). Development Mode staat momenteel maximaal vijf geautoriseerde gebruikers toe, inclusief de eigenaar.
-6. Wacht tot GitHub Pages de wijziging heeft gepubliceerd.
-7. Jij en je vrienden openen de website, gaan naar ⚙ Instellingen en drukken op **Koppel Spotify**. Iedereen logt in met het eigen Spotify-account en geeft toestemming.
-8. Start de Spotify-app op de telefoon of speaker die je wilt gebruiken en druk daarna op Play in het muziekspel.
-
-De website gebruikt OAuth Authorization Code met PKCE; er staat geen Client Secret in de code. Tokens worden per gebruiker in diens eigen browser opgeslagen. De Client ID is geen geheim. Deel nooit access tokens, refresh tokens of je Spotify-wachtwoord.
-
-**Belangrijk:** Spotify's huidige Developer Policy verbiedt apps die games of triviaquizzen maken. Dit muziekspel valt daar waarschijnlijk onder; Spotify kan toegang weigeren of intrekken. Controleer de actuele beleidsregels voordat je het met vrienden gebruikt.
-
-## Nummers toevoegen
-Bewerk `tracks.js`. Gebruik per nummer:
-
-```js
-{ spotifyUri: "spotify:track:TRACK_ID", year: 1999, title: "Titel", artist: "Artiest" }
-```
-
-Zo vind je de URI: open een nummer in Spotify → **Delen → Link naar nummer**. Een link als `https://open.spotify.com/track/ABC123...` wordt `spotify:track:ABC123...`.
-
-Gebruik het oorspronkelijke uitgavejaar van de opname zoals je dat in het spel wilt hanteren. De voorbeeldtrack is alleen een placeholder; vervang titel, artiest, jaar en URI door gegevens die bij elkaar horen. Zorg dat er minimaal één geldige track is.
+De Client ID is openbaar en kan veilig in `config.js` staan. Zet **nooit** een Client Secret, Spotify-wachtwoord, access token of refresh token in de repository.
 
 ## Gebruik
-- **Play**: start een willekeurige track via Spotify.
-- **Pauzeer / Verder luisteren**: bedient de huidige track.
-- **Onthul antwoord**: toont artiest, titel en jaar in de webapp.
-- **Volgende track**: verschijnt na onthullen.
-- In Instellingen kun je de afspeelduur instellen.
+
+1. Kies een genre.
+2. Druk op **Koppelen** en log in met je eigen Spotify-account.
+3. Open Spotify op de telefoon, computer of speaker waarop je wilt luisteren en maak dat apparaat actief.
+4. Druk op **Start sessie**. De app kiest en speelt een willekeurig nummer uit het geselecteerde genre.
+5. Gebruik **Pauzeer**, **Verder luisteren** en **Volgend nummer**. Na de laatste track toont de app dat de sessie is afgerond; **Nieuwe sessie** start weer met een lege sessielijst.
+
+## Spotify-vereisten en privacy
+
+- Afspeelbediening via de Spotify Web API vereist Spotify Premium.
+- In de huidige Development Mode gelden Spotify’s gebruikers- en endpointbeperkingen. Voeg vrienden zo nodig als geautoriseerde gebruiker toe in het Developer Dashboard.
+- De app vraagt alleen `user-modify-playback-state` en `user-read-playback-state` aan.
+- OAuth gebruikt Authorization Code met PKCE. Tokens worden uitsluitend in de lokale browseropslag van de ingelogde gebruiker bewaard; verschillende browsers delen geen sessie.
+- Met **Spotify ontkoppelen** verwijder je de lokale tokens.
+
+## Catalogus beheren
+
+De nummers staan in `tracks.js`. Een item heeft minstens `title`, `artist`, `year` en `genres`. Voeg wanneer mogelijk een vaste Spotify URI toe om de exacte opname te gebruiken:
+
+```js
+{ title: 'Peg', artist: 'Steely Dan', year: 1978, genres: ['yachterock'], spotifyUri: 'spotify:track:TRACK_ID' }
+```
+
+Zonder URI zoekt de app naar een exacte titel- en artiestmatch en weigert zij duidelijke live-, cover-, karaoke- en tributeversies. Controleer toegevoegde nummers altijd zelf; een vooraf ingevulde URI is betrouwbaarder.
 
 ## Problemen oplossen
-- **Geen actief Spotify-apparaat**: open de Spotify-app op je telefoon of een speaker en start daar eventueel kort muziek af om het apparaat actief te maken.
-- **INVALID_CLIENT / redirect_uri mismatch**: controleer de Client ID en voeg exact dezelfde URL toe als Redirect URI in het Developer Dashboard.
-- **403 / afspelen geweigerd**: controleer Premium, de scopes en de status/toegang van je Spotify Developer-app.
-- **Geen tracks ingesteld**: controleer dat elke track een `spotify:track:` URI, jaar, titel en artiest heeft.
 
-## Technische notitie
-Deze app is statisch en kan op GitHub Pages draaien. Spotify-authenticatie en afspeelbediening gebeuren vanuit de browser; er is geen extra server of betaald hostingabonnement nodig. Beschikbaarheid van Spotify API-functies en toegang tot de Developer-app zijn afhankelijk van Spotify's actuele voorwaarden en accountinstellingen.
+- **Spotify instellen vereist**: vul de Client ID in `config.js` in en publiceer opnieuw.
+- **Redirect URI-mismatch**: de URL in Spotify moet exact gelijk zijn aan de gepubliceerde URL, inclusief eventuele repositorymap en afsluitende slash.
+- **Geen actief apparaat**: open Spotify op het gewenste apparaat en speel daar kort muziek af.
+- **403 / afspelen geweigerd**: controleer Premium en of het account is toegestaan voor je Developer-app.
+- **Geen betrouwbare versie**: voeg een gecontroleerde `spotifyUri` toe aan dat catalogusitem.
 
+## Controle
 
-## Genres en muziekbibliotheek
-
-De app heeft zes keuzes: **Alles**, **Yachtrock**, **Rock**, **Disco**, **Gitaarmuziek** en **Nederlands**. De catalogus is ingebouwd in `tracks.js` en bevat 100 nummers per genre. De keuze Alles mixt de volledige catalogus zonder dubbele titel/artiest-combinaties.
-
-De catalogus bevat titel, artiest en jaar. Bij het starten zoekt de app via de Spotify Web API een passende track op basis van titel en artiest, slaat de gevonden Spotify-URI lokaal in het geheugen van de pagina op en start die track op het actieve Spotify-apparaat. De app vereist een gekoppeld Spotify-account en een actief Spotify-apparaat. Controleer na het publiceren de Developer Dashboard-instellingen en test een aantal nummers per genre; Spotify kan soms een andere versie of live-opname als eerste zoekresultaat geven.
-
-
-## Genres en muziekbibliotheek
-
-De app heeft zes keuzes: **Alles**, **Yachtrock**, **Rock**, **Disco**, **Gitaarmuziek** en **Nederlands**. De catalogus is ingebouwd in `tracks.js` en bevat 100 nummers per genre. De keuze Alles mixt de volledige catalogus zonder dubbele titel/artiest-combinaties.
-
-De catalogus bevat titel, artiest en jaar. Bij het starten zoekt de app via de Spotify Web API een passende track op basis van titel en artiest, slaat de gevonden Spotify-URI lokaal in het geheugen van de pagina op en start die track op het actieve Spotify-apparaat. De app vereist een gekoppeld Spotify-account en een actief Spotify-apparaat. Controleer na het publiceren de Developer Dashboard-instellingen en test een aantal nummers per genre; Spotify kan soms een andere versie of live-opname als eerste zoekresultaat geven.
+De code is statisch gecontroleerd op OAuth-PKCE met state-validatie, tokenverversing, sessiereset, genrefiltering, non-repeat selectie, zichtbare verbindingsstatus en foutmeldingen. Live OAuth en Spotify-afspelen moeten na het instellen van jouw Client ID, Redirect URI en Premium-account nog in de gepubliceerde app worden getest.
