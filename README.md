@@ -1,6 +1,6 @@
-# Tijdlijn — Muziekspel met Spotify
+# Random Song Player met Spotify
 
-Mobiele webapp voor een muziek-tijdlijnspel. De Play-knop start een willekeurige track via de Spotify Web API; titel, artiest en jaartal worden in de app pas zichtbaar na **Onthul antwoord**.
+Mobiele webapp die willekeurig volledige nummers afspeelt uit een muziekbibliotheek. Gebruikers kiezen een genre en kunnen nummers afspelen, pauzeren en overslaan.
 
 ## Benodigd
 - Een Spotify Premium-account.
@@ -8,7 +8,7 @@ Mobiele webapp voor een muziek-tijdlijnspel. De Play-knop start een willekeurige
 - Een actief Spotify-apparaat (bijvoorbeeld de Spotify-app op je telefoon of een Spotify Connect-speaker).
 - GitHub Pages of een andere HTTPS-hosting voor de website.
 
-> Let op: Spotify's Developer Policy verbiedt integratie in games/triviaquizzen. Deze technische demo is niet officieel goedgekeurd door Spotify; gebruik is op eigen verantwoordelijkheid. API-toegang kan door Spotify worden beperkt.
+> Let op: Spotify Development Mode is bedoeld voor persoonlijke, niet-commerciële projecten en heeft toegangsbeperkingen. De app gebruikt Spotify om muziek af te spelen; toegang is afhankelijk van de actuele Spotify-regels.
 
 ## Publiceren op GitHub Pages
 1. Upload alle bestanden in deze map naar de hoofdmap van een GitHub-repository.
