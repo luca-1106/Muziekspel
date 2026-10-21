@@ -51,7 +51,7 @@
     const verifier = random(64), state = random(24), challenge = base64url(await digest(verifier));
     localStorage.setItem(authVersionKey, authVersion);
     localStorage.setItem(keys.verifier, verifier); localStorage.setItem(keys.state, state);
-    const params = new URLSearchParams({ client_id: clientId, response_type: 'code', redirect_uri: redirectUri, code_challenge_method: 'S256', code_challenge: challenge, state, scope: 'streaming user-modify-playback-state user-read-playback-state' });
+    const params = new URLSearchParams({ client_id: clientId, response_type: 'code', redirect_uri: redirectUri, code_challenge_method: 'S256', code_challenge: challenge, state, scope: 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state' });
     window.location.assign(`https://accounts.spotify.com/authorize?${params}`);
   }
   async function handleCallback() {
