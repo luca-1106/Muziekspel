@@ -20,7 +20,8 @@
   function score(item, source) { const title = normalise(source.title), artist = normalise(source.artist), itemArtists = item.artists?.map(person => normalise(person.name)) || []; if (normalise(item.name) !== title || !itemArtists.includes(artist)) return -Infinity; const version = normalise(`${item.name} ${item.album?.name || ''}`); return 100 - (/(live|karaoke|tribute|cover|instrumental)/.test(version) ? 80 : 0) - (/(remaster|remastered)/.test(version) ? 5 : 0); }
   async function resolve(source) {
     if (source.spotifyUri?.startsWith('spotify:track:')) return window.SpotifyApp.request(`/tracks/${encodeURIComponent(source.spotifyUri.slice(14))}`);
-    const result = await window.SpotifyApp.request(`/search?q=${encodeURIComponent(`track:${source.title} artist:${source.artist}`)}&type=track&limit=20`);
+    // Spotify Development Mode accepteert sinds 2026 maximaal 10 resultaten per zoekopdracht.
+    const result = await window.SpotifyApp.request(`/search?q=${encodeURIComponent(`track:${source.title} artist:${source.artist}`)}&type=track&limit=10`);
     const found = (result.tracks?.items || []).map(item => ({ item, score: score(item, source) })).filter(candidate => candidate.score > 0).sort((a, b) => b.score - a.score)[0]?.item;
     if (!found) throw new Error(`Geen betrouwbare Spotify-versie gevonden voor ${source.title} van ${source.artist}.`);
     return found;
