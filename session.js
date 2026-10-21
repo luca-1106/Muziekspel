@@ -21,10 +21,9 @@
   const setError = message => { $('#errorMessage').textContent = message || ''; $('#errorMessage').hidden = !message; };
   const setStatus = (title, detail, active = false) => { $('#statusText').textContent = title; $('#instruction').textContent = detail; $('#statusDot').classList.toggle('active', active); };
   const setPauseButton = (icon, label) => { $('#pauseButton').innerHTML = `<span class="button-icon">${icon}</span><span>${label}</span>`; };
-  const formatTime = seconds => `${Math.floor(Math.max(0, seconds) / 60)}:${String(Math.floor(Math.max(0, seconds) % 60)).padStart(2, '0')}`;
   const wait = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
   const updateCount = () => { $('#sessionCount').textContent = `${used.size} / ${tracks.length}`; };
-  function updateProgress() { if (!playerState) return; const duration = Math.max(1, (playerState.duration || currentTrack?.duration_ms || 0) / 1000); const elapsed = (playerState.position || 0) / 1000 + (isPlaying ? (Date.now() - stateUpdatedAt) / 1000 : 0); $('#timeLabel').textContent = `${formatTime(elapsed)} / ${formatTime(duration)}`; $('#progressBar').style.width = `${Math.min(100, elapsed / duration * 100)}%`; }
+  function updateProgress() { if (!playerState) return; const duration = Math.max(1, (playerState.duration || currentTrack?.duration_ms || 0) / 1000); const elapsed = (playerState.position || 0) / 1000 + (isPlaying ? (Date.now() - stateUpdatedAt) / 1000 : 0); const percentage = Math.min(100, elapsed / duration * 100); $('#progressBar').style.width = `${percentage}%`; $('.progress-track').setAttribute('aria-valuenow', String(Math.round(percentage))); }
   function startTimer() { clearInterval(progressTimer); updateProgress(); progressTimer = setInterval(updateProgress, 500); }
   function score(item, source) {
     const wantedTitle = normaliseTitle(source.title), foundTitle = normaliseTitle(item.name);

@@ -186,11 +186,6 @@ body.session-page {
   margin: 0;
 }
 
-.session-page .progress-meta {
-  justify-content: flex-end;
-  margin-bottom: 6px;
-}
-
 .session-page .error-message {
   margin: 0;
   max-height: 3em;
