@@ -163,6 +163,7 @@ body.session-page {
   display: grid;
   justify-items: center;
   gap: clamp(2px, .6dvh, 6px);
+  transform: translateY(clamp(38px, 7dvh, 64px));
   overflow: hidden;
 }
 
