@@ -24,3 +24,6 @@
 .genre-button.active { background:#d6fb65; border-color:#d6fb65; color:#171a13; font-weight:750; }
 .genre-button:focus-visible { outline:2px solid #d6fb65; outline-offset:3px; }
 @media (max-width:420px) { .genre-picker { padding:13px; } .genre-options { gap:7px; } .genre-button { padding:9px 12px; font-size:.82rem; } }
+
+/* Random Song Player */
+.now-playing{display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;margin:0 0 22px;min-height:95px;justify-content:center}.now-playing h2{font-family:'Space Grotesk',sans-serif;font-size:23px;line-height:1.2;letter-spacing:-.5px;margin:0;overflow-wrap:anywhere}.now-playing p{font-size:14px;color:var(--muted);margin:0;overflow-wrap:anywhere}.now-playing small{font-size:11px;color:var(--lime)}.text-button{border:0;background:transparent;color:var(--muted);font:600 12px 'DM Sans',sans-serif;text-decoration:underline;cursor:pointer;padding:8px 0}.text-button[hidden]{display:none}.progress-wrap{display:none}.controls{grid-template-columns:1fr 1fr}.genre-picker{margin-bottom:18px}
