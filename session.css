@@ -1,0 +1,322 @@
+/* De sessie blijft binnen de zichtbare mobiele viewport, inclusief Safari-balken. */
+body.session-page {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.session-page .app-shell {
+  width: min(calc(100% - 24px), 480px);
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  padding: max(10px, env(safe-area-inset-top)) 0 max(10px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: clamp(8px, 1.5dvh, 14px);
+  overflow: hidden;
+}
+
+.session-page .topbar {
+  min-height: 44px;
+}
+
+.session-page .topbar h1 {
+  font-size: clamp(24px, 7vw, 34px);
+  line-height: .95;
+}
+
+.session-page .back-button {
+  width: clamp(40px, 11vw, 48px);
+  height: clamp(40px, 11vw, 48px);
+}
+
+.session-page .compact-intro {
+  margin: 0;
+  min-height: 0;
+}
+
+.session-page .compact-intro p {
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.session-page .player-card {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: clamp(10px, 2dvh, 18px) clamp(12px, 4vw, 20px);
+  border-radius: clamp(18px, 5vw, 25px);
+  display: grid;
+  grid-template-rows: minmax(76px, 1fr) auto auto auto auto;
+  align-content: stretch;
+  gap: clamp(5px, 1dvh, 10px);
+  overflow: hidden;
+}
+
+.session-page .player-card > * {
+  min-width: 0;
+}
+
+.session-page .player-card.awaiting-playback {
+  grid-template-rows: minmax(0, 1fr) auto auto;
+}
+
+.session-page .player-card.awaiting-playback .now-playing,
+.session-page .player-card.awaiting-playback .progress-wrap,
+.session-page .player-card.awaiting-playback #pauseButton,
+.session-page .player-card.awaiting-playback #nextButton {
+  display: none;
+}
+
+.session-page .player-card.awaiting-playback .album-wrap {
+  grid-row: 1;
+}
+
+.session-page .player-card.awaiting-playback .error-message {
+  grid-row: 2;
+  text-align: center;
+}
+
+.session-page .player-card.awaiting-playback .controls {
+  grid-row: 3;
+  display: block;
+  text-align: center;
+}
+
+.session-page .album-wrap {
+  position: relative;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.session-page .album-art,
+.session-page .album-wrap > .vinyl {
+  width: clamp(84px, min(33vw, 20dvh), 150px);
+  height: clamp(84px, min(33vw, 20dvh), 150px);
+}
+
+.session-page .album-wrap > [hidden] {
+  display: none !important;
+}
+
+.session-page .browser-play-button {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(62px, 18vw, 84px);
+  height: clamp(62px, 18vw, 84px);
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--lime);
+  color: #171a12;
+  box-shadow: 0 10px 30px #0009, 0 0 0 7px #121411a6;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.session-page .browser-play-button span {
+  margin-left: .12em;
+  font-size: clamp(25px, 8vw, 36px);
+  line-height: 1;
+}
+
+.session-page .browser-play-button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.session-page .browser-play-button:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 4px;
+}
+
+.session-page .vinyl-label {
+  width: clamp(32px, 9vw, 51px);
+  height: clamp(32px, 9vw, 51px);
+  border-width: clamp(3px, 1vw, 5px);
+  font-size: clamp(17px, 5vw, 27px);
+}
+
+.session-page .now-playing {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.session-page .now-playing h2 {
+  margin-bottom: 2px;
+  font-size: clamp(18px, 5.6vw, 25px);
+  line-height: 1.08;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.session-page .now-playing p:not(.eyebrow) {
+  font-size: clamp(11px, 3.4vw, 14px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-page .spotify-link {
+  margin-top: 5px;
+  font-size: clamp(10px, 3vw, 12px);
+}
+
+.session-page .progress-wrap {
+  margin: 0;
+}
+
+.session-page .progress-meta {
+  margin-bottom: 6px;
+}
+
+.session-page .error-message {
+  margin: 0;
+  max-height: 3em;
+  font-size: clamp(10px, 3vw, 12px);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.session-page .error-message[hidden] {
+  display: none;
+}
+
+.session-page .controls {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(6px, 2vw, 9px);
+}
+
+.session-page .primary-button,
+.session-page .secondary-button {
+  min-width: 0;
+  min-height: clamp(42px, 6.4dvh, 52px);
+  padding: 0 clamp(8px, 2.5vw, 14px);
+  border-radius: clamp(12px, 4vw, 15px);
+  font-size: clamp(11px, 3.5vw, 14px);
+  line-height: 1.1;
+}
+
+.session-page .primary-button span:last-child,
+.session-page .secondary-button span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-page .text-button {
+  min-height: 26px;
+  padding: 3px;
+}
+
+/* Compacte modus voor onder meer iPhone SE en browsers met grote balken. */
+@media (max-height: 700px) {
+  .session-page .app-shell {
+    padding-top: max(6px, env(safe-area-inset-top));
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
+    gap: 6px;
+  }
+
+  .session-page .topbar {
+    min-height: 38px;
+  }
+
+  .session-page .topbar h1 {
+    font-size: 23px;
+  }
+
+  .session-page .back-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .session-page .compact-intro p {
+    display: none;
+  }
+
+  .session-page .player-card {
+    padding: 8px 10px;
+    grid-template-rows: minmax(66px, 1fr) auto auto auto;
+    gap: 4px;
+  }
+
+  .session-page .album-art,
+  .session-page .album-wrap > .vinyl {
+    width: clamp(72px, 16dvh, 105px);
+    height: clamp(72px, 16dvh, 105px);
+  }
+
+  .session-page .browser-play-button {
+    width: 58px;
+    height: 58px;
+  }
+
+  .session-page .eyebrow {
+    margin-bottom: 2px;
+    font-size: 8px;
+  }
+
+  .session-page .now-playing h2 {
+    font-size: clamp(17px, 5vw, 21px);
+  }
+
+  .session-page .spotify-link {
+    margin-top: 2px;
+  }
+
+  .session-page .primary-button,
+  .session-page .secondary-button {
+    min-height: 40px;
+  }
+}
+
+@media (max-height: 580px) {
+  .session-page .intro {
+    display: none;
+  }
+
+  .session-page .app-shell {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .session-page .player-card {
+    grid-template-rows: minmax(58px, 1fr) auto auto auto;
+  }
+
+  .session-page .album-art,
+  .session-page .album-wrap > .vinyl {
+    width: 92px;
+    height: 92px;
+  }
+}
+
+@media (max-width: 350px) {
+  .session-page .app-shell {
+    width: calc(100% - 16px);
+  }
+
+  .session-page .session-count {
+    font-size: 10px;
+  }
+
+  .session-page .controls {
+    gap: 5px;
+  }
+}
+
