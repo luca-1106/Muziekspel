@@ -56,15 +56,14 @@
   <dialog id="settingsDialog" class="settings-dialog">
     <form method="dialog" class="dialog-header"><div><p class="eyebrow">INSTELLINGEN</p><h2>Instellingen</h2></div><button class="icon-button" aria-label="Sluiten">✕</button></form>
     <div class="dialog-body">
-      <p>Stel in hoelang elk nummer speelt voordat het stopt. De antwoorden blijven verborgen totdat iemand op <strong>Onthul antwoord</strong> drukt.</p>
-      <label for="clipLength">Speelduur per nummer <strong><span id="clipLengthValue">25</span> sec.</strong></label>
-      <input id="clipLength" type="range" min="10" max="60" step="5" value="25" />
-      <label class="check-label"><input id="autoStop" type="checkbox" checked /> Stop automatisch na de ingestelde speelduur</label>
+      <p>Koppel je Spotify-account om muziek af te spelen. De app speelt volledige nummers af en stopt niet automatisch.</p>
       <hr class="settings-divider" />
       <h3>Spotify koppelen</h3>
       <p>Iedere gebruiker koppelt zijn eigen Spotify-account. De eigenaar moet de gebruiker vooraf toevoegen aan de gebruikerslijst van de Spotify Developer-app.</p>
       <button id="connectSpotify" class="secondary-button full-button" type="button">Koppel Spotify</button>
-      <p id="spotifyConnection" class="connection-status">Spotify is nog niet gekoppeld.</p>\n      <button id="disconnectSpotify" class="text-button" type="button" hidden>Ontkoppel Spotify</button>
+      <p id="spotifyConnection" class="connection-status">Spotify is nog niet gekoppeld.</p>
+      <button id="disconnectSpotify" class="text-button" type="button" hidden>Ontkoppel Spotify</button>
+      <button id="disconnectSpotify" class="text-button" type="button" hidden>Ontkoppel Spotify</button>
       <div class="settings-hint">De ingebouwde catalogus bevat nummers per genre. De app zoekt elk gekozen nummer op Spotify en bedient je actieve Spotify-apparaat. Start Spotify eerst op je telefoon of speaker.</div>
     </div>
     <div class="dialog-actions"><button id="closeSettings" class="primary-button">Gereed</button></div>
