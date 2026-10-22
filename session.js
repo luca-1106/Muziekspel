@@ -14,8 +14,10 @@
     .replace(/\s+/g, ' ').trim();
   const normaliseArtist = value => normalise(value).replace(/^the\s+/, '').replace(/\s+(feat|featuring|ft)\s+.*$/, '').trim();
   const overlap = (left, right) => { const wanted = new Set(left.split(' ').filter(Boolean)); const found = new Set(right.split(' ').filter(Boolean)); return wanted.size ? [...wanted].filter(word => found.has(word)).length / wanted.size : 0; };
-  const matchesGenre = track => genre === 'alles' || (Array.isArray(track.genres) ? track.genres.includes(genre) : track.genre === genre);
-  const tracks = [...new Map(sourceTracks.filter(matchesGenre).map(track => [key(track), track])).values()];
+    const fallbackGenre = { yachterock: 'pop', rock: 'gitaarmuziek', disco: 'dance', gitaarmuziek: 'rock', nederlands: 'pop', pop: 'soul', soul: 'pop', hiphop: 'soul', dance: 'disco', country: 'yachterock' };
+  let activeGenre = genre;
+  const tracksForGenre = selected => [...new Map(sourceTracks.filter(track => selected === 'alles' || (Array.isArray(track.genres) ? track.genres.includes(selected) : track.genre === selected)).map(track => [key(track), track])).values()];
+  let tracks = tracksForGenre(activeGenre);
   let player, browserDeviceId = '', pendingTrack, currentTrack, playerState, stateUpdatedAt = 0, used = new Set(), unavailable = new Set(), isPlaying = false, progressTimer;
 
   const setError = message => { $('#errorMessage').textContent = message || ''; $('#errorMessage').hidden = !message; };
@@ -59,7 +61,21 @@
       const j = Math.floor(Math.random() * (i + 1));
       [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
     }
-    if (!candidates.length) throw new Error('Alle beschikbare nummers in deze sessie zijn afgespeeld.');
+    if (!candidates.length) {
+      const nextGenre = fallbackGenre[activeGenre];
+      if (nextGenre && nextGenre !== activeGenre) {
+        const nextTracks = tracksForGenre(nextGenre);
+        if (nextTracks.some(track => !used.has(key(track)) && !unavailable.has(key(track)))) {
+          activeGenre = nextGenre;
+          tracks = nextTracks;
+          $('#sessionTitle').innerHTML = `${genreNames[activeGenre]}<span>.</span>`;
+          updateCount();
+          setStatus('Genre gewisseld', `Alle nummers van ${genreNames[genre]} zijn op. We gaan verder met ${genreNames[activeGenre]}.`);
+          return prepareTrack();
+        }
+      }
+      throw new Error('Alle beschikbare nummers van dit genre zijn afgespeeld. Ook het meest vergelijkbare genre heeft geen nieuwe nummers meer.');
+    }
     for (const source of candidates) {
       try { const spotify = await resolve(source); pendingTrack = { source, spotify }; return; }
       catch (error) { if (error.code !== 'TRACK_NOT_FOUND') throw error; unavailable.add(key(source)); }
