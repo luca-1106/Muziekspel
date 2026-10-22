@@ -244,6 +244,58 @@ body.session-page {
   padding: 3px;
 }
 
+.session-page .exit-dialog {
+  width: min(calc(100% - 32px), 360px);
+  max-width: none;
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #1a1e17;
+  color: var(--text);
+  box-shadow: 0 24px 80px #000c;
+}
+
+.session-page .exit-dialog::backdrop {
+  background: #080a07b8;
+  backdrop-filter: blur(3px);
+}
+
+.session-page .exit-dialog-content {
+  padding: 22px;
+  text-align: center;
+}
+
+.session-page .exit-dialog .eyebrow {
+  margin: 0 0 8px;
+}
+
+.session-page .exit-dialog h2 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.session-page .exit-dialog p:not(.eyebrow) {
+  margin: 10px 0 20px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.session-page .exit-dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 8px;
+}
+
+.session-page .exit-dialog-actions button {
+  min-height: 46px;
+  padding: 0 12px;
+  border-radius: 14px;
+  font-size: 13px;
+}
+
 /* Compacte modus voor onder meer iPhone SE en browsers met grote balken. */
 @media (max-height: 700px) {
   .session-page .app-shell {
