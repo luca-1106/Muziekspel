@@ -53,13 +53,18 @@
   }
   function renderTrack(spotifyTrack, sourceTrack, revealArtwork = false) { $('#trackTitle').textContent = sourceTrack.title; $('#trackArtist').textContent = sourceTrack.artist; const year = String(sourceTrack.year || spotifyTrack.album?.release_date || '').match(/\d{4}/)?.[0] || ''; $('#trackYear').textContent = year; $('#trackYear').hidden = !year; const image = spotifyTrack.album?.images?.[0]?.url; $('#albumArt').hidden = !revealArtwork || !image; $('#albumFallback').hidden = revealArtwork && Boolean(image); if (image) { $('#albumArt').src = image; $('#albumArt').alt = `Albumhoes: ${spotifyTrack.album.name}`; } }
   async function prepareTrack() {
-    const candidates = tracks.filter(track => !used.has(key(track)) && !unavailable.has(key(track))).sort(() => Math.random() - 0.5);
+    const candidates = tracks.filter(track => !used.has(key(track)) && !unavailable.has(key(track)));
+    // Fisher-Yates: elke nog niet afgespeelde track heeft gelijke kans.
+    for (let i = candidates.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+    }
     if (!candidates.length) throw new Error('Alle beschikbare nummers in deze sessie zijn afgespeeld.');
-    for (const source of candidates.slice(0, 10)) {
+    for (const source of candidates) {
       try { const spotify = await resolve(source); pendingTrack = { source, spotify }; return; }
       catch (error) { if (error.code !== 'TRACK_NOT_FOUND') throw error; unavailable.add(key(source)); }
     }
-    throw new Error('Spotify kon meerdere nummers niet betrouwbaar koppelen. Probeer Volgend nummer opnieuw.');
+    throw new Error('Geen van de resterende nummers kon betrouwbaar op Spotify worden gevonden.');
   }
   async function waitForTrack(uri) { for (let attempt = 0; attempt < 30; attempt += 1) { if (playerState?.track_window?.current_track?.uri === uri && !playerState.paused) return; await wait(150); } throw new Error('Safari kon de Spotify-audio niet starten. Koppel Spotify opnieuw en probeer daarna nogmaals.'); }
   async function playPending() { if (!pendingTrack) await prepareTrack(); await player.activateElement(); await window.SpotifyApp.request(`/me/player/play?device_id=${encodeURIComponent(browserDeviceId)}`, 'PUT', { uris: [pendingTrack.spotify.uri] }); await player.resume(); await waitForTrack(pendingTrack.spotify.uri); renderTrack(pendingTrack.spotify, pendingTrack.source, false); $('.player-card').classList.add('track-concealed'); $('#revealButton').hidden = false; currentTrack = pendingTrack.spotify; used.add(key(pendingTrack.source)); pendingTrack = null; isPlaying = true; updateCount(); startTimer(); $('#startPlayback').hidden = true; $('.player-card').classList.remove('awaiting-playback'); $('#pauseButton').disabled = false; $('#nextButton').disabled = false; setPauseButton('pause', 'Pauzeer'); setStatus('Sessie actief', `${used.size} van ${tracks.length} nummers afgespeeld.`, true); }
