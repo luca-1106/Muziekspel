@@ -889,5 +889,14 @@ window.REFRESH_DISCO = [
     "genres": [
       "disco"
     ]
+  },
+  {
+    "title": "You Should Be Dancing",
+    "artist": "Bee Gees",
+    "year": 1976,
+    "spotifyUri": "",
+    "genres": [
+      "disco"
+    ]
   }
 ];
