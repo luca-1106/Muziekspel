@@ -419,3 +419,17 @@ body.session-page {
   border-radius: 50%;
   flex-shrink: 0;
 }
+
+/* Tijdens voorbereiden geen twee symbolen op elkaar. */
+.session-page .player-card.awaiting-playback .browser-play-button:disabled {
+  display: none !important;
+}
+/* Zodra starten mogelijk is, staat uitsluitend het duidelijke play-icoon centraal. */
+.session-page .player-card.awaiting-playback:has(.browser-play-button:not(:disabled)) .vinyl-label {
+  visibility: hidden;
+}
+.session-page .player-card.awaiting-playback .browser-play-button:not(:disabled) {
+  background: var(--lime);
+  opacity: 1;
+  box-shadow: 0 10px 30px #0009, 0 0 0 7px #121411;
+}
