@@ -452,9 +452,14 @@ body.session-page {
 /* Link naar de exacte Spotify-track, uitsluitend na onthullen. */
 .session-page .spotify-track-link {
   display: block;
-  justify-self: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(30px, 7dvh, 85px);
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
   text-align: center;
-  margin-top: clamp(16px, 3dvh, 30px);
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -470,3 +475,11 @@ body.session-page {
 .session-page .spotify-track-link:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
 .session-page .spotify-track-link[hidden],
 .session-page .player-card.track-concealed .spotify-track-link { display: none !important; }
+
+/* Houd de Spotify-link los van de verticaal verschoven nummerinformatie. */
+.session-page .track-display { position: relative; }
+.session-page .player-card:not(.track-concealed) .now-playing { transform: translateY(clamp(0px, 2dvh, 16px)); }
+@media (max-height: 700px) {
+  .session-page .spotify-track-link { bottom: clamp(12px, 4dvh, 30px); }
+  .session-page .player-card:not(.track-concealed) .now-playing { transform: none; }
+}
