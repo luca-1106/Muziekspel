@@ -1,7 +1,7 @@
 // Combineer genres en ontdubbel nummers op artiest + titel.
 // Een nummer mag bij meerdere genres horen.
 (() => {
-  const lists = [window.TRACKS, window.EXTRA_HIPHOP, window.EXTRA_COUNTRY, window.EXTRA_DANCE, window.EXTRA_POP, window.EXTRA_SOUL];
+  const lists = [window.REFRESH_YACHTROCK, window.REFRESH_ROCK, window.REFRESH_DISCO, window.REFRESH_GITAAR, window.REFRESH_NEDERLANDS, window.EXTRA_HIPHOP, window.EXTRA_COUNTRY, window.EXTRA_DANCE, window.EXTRA_POP, window.EXTRA_SOUL];
   const merged = new Map();
   const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('nl').replace(/[^a-z0-9]+/g, ' ').trim();
   for (const list of lists) {
