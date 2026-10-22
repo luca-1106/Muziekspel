@@ -451,8 +451,10 @@ body.session-page {
 
 /* Link naar de exacte Spotify-track, uitsluitend na onthullen. */
 .session-page .spotify-track-link {
-  display: inline;
-  margin-top: clamp(5px, 1dvh, 10px);
+  display: block;
+  justify-self: center;
+  text-align: center;
+  margin-top: clamp(16px, 3dvh, 30px);
   padding: 0;
   border: 0;
   border-radius: 0;
