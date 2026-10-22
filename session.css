@@ -196,6 +196,17 @@ body.session-page {
   overflow: hidden;
 }
 
+/* Alleen voor tracks met meerdere gecrediteerde artiesten: toon iedereen volledig. */
+.session-page .now-playing .track-artist.multiple-artists {
+  max-width: 94%;
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  font-size: clamp(13px, 3.8vw, 17px);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
 .session-page .progress-wrap {
   margin: clamp(20px, 3.2dvh, 34px) 0 clamp(12px, 2dvh, 22px);
 }
