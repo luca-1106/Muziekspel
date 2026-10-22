@@ -1,30 +1,39 @@
-// Controle voor de geplande muziekbibliotheek van Muziekmix.
-// Uitvoeren met: node scripts/check-library.cjs
+// Controleer de werkelijk actieve bibliotheek, inclusief overlap.
 const fs = require('node:fs');
 const vm = require('node:vm');
-const source = fs.readFileSync('tracks.js', 'utf8');
 const context = { window: {} };
-vm.runInNewContext(source, context);
-const tracks = context.window.TRACKS || [];
+const files = [
+  'tracks.js',
+  'library/hiphop.js', 'library/country.js', 'library/dance.js',
+  'library/pop.js', 'library/soul.js',
+  'library/nederlands-refresh.js', 'library/rock-refresh.js',
+  'library/gitaarmuziek-refresh.js', 'library/yachterock-refresh.js',
+  'library/disco-refresh.js', 'library/merge.js'
+];
+for (const file of files) vm.runInNewContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
 const genres = ['yachterock','rock','disco','gitaarmuziek','nederlands','pop','soul','hiphop','dance','country'];
-let errors = [];
+const tracks = context.window.TRACKS;
+const errors = [];
 for (const genre of genres) {
-  const entries = tracks.filter(t => t.genres?.includes(genre));
+  const entries = tracks.filter(t => t.genres.includes(genre));
+  const artists = new Map();
   const unique = new Set();
-  const artistCounts = new Map();
-  const decades = new Map();
+  const decades = {};
   for (const t of entries) {
-    const key = (t.artist + '\0' + t.title).toLocaleLowerCase();
-    if (unique.has(key)) errors.push(genre + ': dubbel nummer ' + t.artist + ' - ' + t.title);
-    unique.add(key);
     const artist = t.artist.toLocaleLowerCase().trim();
-    artistCounts.set(artist, (artistCounts.get(artist) || 0) + 1);
-    if (!Number.isInteger(t.year) || t.year < 1930 || t.year > 2026) errors.push(genre + ': onwaarschijnlijk jaartal ' + t.title);
-    decades.set(Math.floor(t.year / 10) * 10, (decades.get(Math.floor(t.year / 10) * 10) || 0) + 1);
+    const key = artist + '\\0' + t.title.toLocaleLowerCase().trim();
+    if (unique.has(key)) errors.push(genre + ': dubbel nummer ' + key);
+    unique.add(key);
+    artists.set(artist, (artists.get(artist) || 0) + 1);
+    if (!Number.isInteger(t.year) || t.year < 1930 || t.year > 2026) errors.push(genre + ': onjuist jaar ' + t.title);
+    const decade = Math.floor(t.year / 10) * 10;
+    decades[decade] = (decades[decade] || 0) + 1;
   }
-  if (unique.size < 100) errors.push(genre + ': ' + unique.size + ' nummers, minimaal 100 vereist');
-  for (const [artist, count] of artistCounts) if (count > 3) errors.push(genre + ': ' + artist + ' heeft ' + count + ' nummers');
-  console.log(genre + ': ' + unique.size + ' nummers, ' + artistCounts.size + ' artiesten, decennia ' + JSON.stringify(Object.fromEntries([...decades].sort((a,b)=>a[0]-b[0]))));
+  if (unique.size < 100) errors.push(genre + ': minder dan 100 nummers');
+  if (artists.size < 75) errors.push(genre + ': minder dan 75 artiesten');
+  for (const [artist, count] of artists) if (count > 3) errors.push(genre + ': meer dan 3 van ' + artist);
+  console.log(genre + ': ' + entries.length + ' nummers, ' + artists.size + ' artiesten, decennia: ' + JSON.stringify(decades));
 }
-if (errors.length) { console.error('\n' + errors.join('\n')); process.exitCode = 1; }
-else console.log('Alle automatische controles geslaagd. Bekendheid en genre-fit blijven handmatige controles.');
+console.log('Alles: ' + tracks.length + ' unieke nummers');
+if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
+else console.log('Alle kwantitatieve controles geslaagd. Spotify-zoekresultaten, oorspronkelijke releasedata en genre-fit zijn niet extern geverifieerd.');
