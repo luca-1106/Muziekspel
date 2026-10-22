@@ -396,3 +396,10 @@ body.session-page {
   }
 }
 
+
+/* Verberg nummerinformatie tot de gebruiker bewust onthult. */
+.session-page .player-card.track-concealed .now-playing,
+.session-page .player-card.track-concealed .album-art { display: none !important; }
+.session-page .player-card.track-concealed .album-wrap > .vinyl { display: grid !important; }
+.session-page .reveal-button { width: min(100%, 220px); justify-self: center; margin: 0 auto; }
+.session-page .reveal-button[hidden] { display: none !important; }
