@@ -403,3 +403,19 @@ body.session-page {
 .session-page .player-card.track-concealed .album-wrap > .vinyl { display: grid !important; }
 .session-page .reveal-button { width: min(100%, 220px); justify-self: center; margin: 0 auto; }
 .session-page .reveal-button[hidden] { display: none !important; }
+
+/* Sessie: dezelfde strakke ronde vinylplaat als op de startpagina. */
+.session-page .album-wrap > .vinyl {
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: repeating-radial-gradient(circle at center, #111 0, #111 2px, #242722 3px, #121411 5px);
+  box-shadow: 0 10px 30px #0008, 0 0 0 1px #ffffff12;
+}
+.session-page .album-wrap > .vinyl .vinyl-label {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
