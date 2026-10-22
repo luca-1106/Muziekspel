@@ -442,3 +442,8 @@ body.session-page {
 .session-page .album-wrap > .vinyl {
   box-shadow: 0 8px 22px 3px rgb(0 0 0 / 22%);
 }
+
+/* Alleen de zichtbare onthulknop lager plaatsen; overige layout blijft staan. */
+.session-page .player-card.track-concealed .reveal-button:not([hidden]) {
+  transform: translateY(clamp(35px, 9dvh, 90px));
+}
