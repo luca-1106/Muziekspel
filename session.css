@@ -455,7 +455,7 @@ body.session-page {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(30px, 7dvh, 85px);
+  bottom: clamp(6px, 1.5dvh, 18px);
   width: max-content;
   max-width: 100%;
   margin: 0 auto;
@@ -480,6 +480,6 @@ body.session-page {
 .session-page .track-display { position: relative; }
 .session-page .player-card:not(.track-concealed) .now-playing { transform: translateY(clamp(0px, 2dvh, 16px)); }
 @media (max-height: 700px) {
-  .session-page .spotify-track-link { bottom: clamp(12px, 4dvh, 30px); }
+  .session-page .spotify-track-link { bottom: clamp(4px, 1dvh, 10px); }
   .session-page .player-card:not(.track-concealed) .now-playing { transform: none; }
 }
