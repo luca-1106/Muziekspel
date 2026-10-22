@@ -13,7 +13,7 @@
   function renderGenres() {
     const count = pool().length;
     $('#genreCount').textContent = `${count} nummers`;
-    document.querySelectorAll('.genre-button').forEach(button => { const active = button.dataset.genre === selectedGenre; button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active)); });
+    $('#genreSelect').value = selectedGenre;
   }
   function renderConnection(profile) {
     const connected = Boolean(profile);
@@ -25,7 +25,7 @@
   async function refreshConnection() { if (!window.SpotifyApp.hasSession()) return renderConnection(null); try { renderConnection(await window.SpotifyApp.profile()); } catch (_) { window.SpotifyApp.clear(); renderConnection(null); } }
   async function guarded(action) { try { setError(); await action(); } catch (error) { setError(error.message || 'Er ging iets mis.'); setStatus('Actie niet gelukt', 'Controleer de Spotify-koppeling en probeer opnieuw.'); } }
 
-  document.querySelectorAll('.genre-button').forEach(button => button.addEventListener('click', () => { selectedGenre = button.dataset.genre; renderGenres(); setStatus(`${genreNames[selectedGenre]} geselecteerd`, 'Druk op Start sessie om door te gaan.'); }));
+  $('#genreSelect').addEventListener('change', event => { selectedGenre = event.target.value; renderGenres(); setStatus(`${genreNames[selectedGenre]} geselecteerd`, 'Druk op Start sessie om door te gaan.'); });
   $('#connectSpotify').addEventListener('click', () => guarded(() => window.SpotifyApp.login()));
   $('#disconnectSpotify').addEventListener('click', () => { window.SpotifyApp.clear(); renderConnection(null); setStatus('Spotify ontkoppeld', 'Koppel een account om een sessie te starten.'); });
   $('#startSession').addEventListener('click', () => guarded(async () => {
