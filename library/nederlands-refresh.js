@@ -889,5 +889,14 @@ window.REFRESH_NEDERLANDS = [
     "genres": [
       "nederlands"
     ]
+  },
+  {
+    "title": "Als ze er niet is",
+    "artist": "De Dijk",
+    "year": 1994,
+    "spotifyUri": "",
+    "genres": [
+      "nederlands"
+    ]
   }
 ];
