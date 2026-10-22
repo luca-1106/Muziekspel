@@ -477,6 +477,7 @@ body.session-page {
 /* Laat de Spotify-link automatisch meeschuiven met één- of tweeregelige titels. */
 .session-page .track-display { position: relative; }
 .session-page .player-card:not(.track-concealed) .now-playing { transform: none; }
+.session-page .player-card:not(.track-concealed) .track-display { transform: translateY(-2dvh); }
 @media (max-height: 700px) {
   .session-page .spotify-track-link { margin-top: clamp(12px, 2dvh, 20px); }
 }
