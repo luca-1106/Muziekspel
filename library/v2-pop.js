@@ -873,27 +873,27 @@ window.LIB_V2_POP = [
     ]
   },
   {
-    "title": "Die With A Smile",
-    "artist": "Lady Gaga & Bruno Mars",
-    "year": 2024,
+    "title": "Ordinary",
+    "artist": "Alex Warren",
+    "year": 2025,
     "spotifyUri": "",
     "genres": [
       "pop"
     ]
   },
   {
-    "title": "Beautiful Things",
-    "artist": "Benson Boone",
-    "year": 2024,
+    "title": "Man I Need",
+    "artist": "Olivia Dean",
+    "year": 2025,
     "spotifyUri": "",
     "genres": [
       "pop"
     ]
   },
   {
-    "title": "Good Luck, Babe!",
-    "artist": "Chappell Roan",
-    "year": 2024,
+    "title": "Fever Dream",
+    "artist": "Alex Warren",
+    "year": 2026,
     "spotifyUri": "",
     "genres": [
       "pop"
