@@ -1,8 +1,21 @@
 (() => {
   'use strict';
   const $ = selector => document.querySelector(selector);
-  const genre = sessionStorage.getItem('muziekmix.session.genre');
   const genreNames = { alles: 'Alle genres', pop: 'Pop', rock: 'Rock', nederlands: 'Nederlandstalig', guilty: 'Guilty Pleasures', yachterock: 'Yachtrock', soul: 'Soul & R&B', funkdisco: 'Funk & Disco', country: 'Country & Folk', gitaarmuziek: 'Gitaarmuziek', bluesjazzswing: 'Blues, Jazz & Swing' };
+  const legacyGenre = sessionStorage.getItem('muziekmix.session.genre');
+  let selectedGenres = [];
+  try {
+    const stored = JSON.parse(sessionStorage.getItem('muziekmix.session.genres') || '[]');
+    if (Array.isArray(stored)) selectedGenres = stored.filter(value => genreNames[value]);
+  } catch (_) {}
+  if (!selectedGenres.length && legacyGenre && genreNames[legacyGenre]) selectedGenres = [legacyGenre];
+  if (selectedGenres.includes('alles')) selectedGenres = ['alles'];
+  const sessionGenreLabel = () => {
+    if (selectedGenres.includes('alles')) return genreNames.alles;
+    if (selectedGenres.length === 1) return genreNames[selectedGenres[0]];
+    if (selectedGenres.length === 2) return selectedGenres.map(value => genreNames[value]).join(' + ');
+    return `${selectedGenres.length} genres`;
+  };
   const sourceTracks = Array.isArray(window.TRACKS) ? window.TRACKS.filter(track => track?.title && track?.artist) : [];
   const key = track => `${track.title}\u0000${track.artist}`.toLowerCase();
   const normalise = value => String(value || '').toLocaleLowerCase('nl').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
@@ -14,10 +27,15 @@
     .replace(/\s+/g, ' ').trim();
   const normaliseArtist = value => normalise(value).replace(/^the\s+/, '').replace(/\s+(feat|featuring|ft)\s+.*$/, '').trim();
   const overlap = (left, right) => { const wanted = new Set(left.split(' ').filter(Boolean)); const found = new Set(right.split(' ').filter(Boolean)); return wanted.size ? [...wanted].filter(word => found.has(word)).length / wanted.size : 0; };
-    const fallbackGenre = { yachterock: 'pop', rock: 'gitaarmuziek', gitaarmuziek: 'rock', nederlands: 'pop', pop: 'guilty', guilty: 'pop', soul: 'funkdisco', funkdisco: 'soul', country: 'gitaarmuziek', bluesjazzswing: 'soul' };
-  let activeGenre = genre;
-  const tracksForGenre = selected => [...new Map(sourceTracks.filter(track => selected === 'alles' || (Array.isArray(track.genres) ? track.genres.includes(selected) : track.genre === selected)).map(track => [key(track), track])).values()];
-  let tracks = tracksForGenre(activeGenre);
+  const tracksForGenres = selected => {
+    const all = selected.includes('alles');
+    const matching = all ? sourceTracks : sourceTracks.filter(track => {
+      const genres = Array.isArray(track.genres) ? track.genres : [track.genre].filter(Boolean);
+      return genres.some(genre => selected.includes(genre));
+    });
+    return [...new Map(matching.map(track => [key(track), track])).values()];
+  };
+  let tracks = tracksForGenres(selectedGenres);
   let player, browserDeviceId = '', pendingTrack, currentTrack, playerState, stateUpdatedAt = 0, used = new Set(), unavailable = new Set(), isPlaying = false, progressTimer;
 
   const setError = message => { $('#errorMessage').textContent = message || ''; $('#errorMessage').hidden = !message; };
@@ -66,19 +84,7 @@
       [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
     }
     if (!candidates.length) {
-      const nextGenre = fallbackGenre[activeGenre];
-      if (nextGenre && nextGenre !== activeGenre) {
-        const nextTracks = tracksForGenre(nextGenre);
-        if (nextTracks.some(track => !used.has(key(track)) && !unavailable.has(key(track)))) {
-          activeGenre = nextGenre;
-          tracks = nextTracks;
-          $('#sessionTitle').innerHTML = `${genreNames[activeGenre]}<span>.</span>`;
-          updateCount();
-          setStatus('Genre gewisseld', `Alle nummers van ${genreNames[genre]} zijn op. We gaan verder met ${genreNames[activeGenre]}.`);
-          return prepareTrack();
-        }
-      }
-      throw new Error('Alle beschikbare nummers van dit genre zijn afgespeeld. Ook het meest vergelijkbare genre heeft geen nieuwe nummers meer.');
+      throw new Error('Alle beschikbare nummers van de gekozen genres zijn afgespeeld.');
     }
     for (const source of candidates) {
       try { const spotify = await resolve(source); pendingTrack = { source, spotify }; return; }
@@ -93,8 +99,8 @@
   async function guarded(action) { try { setError(); await action(); } catch (error) { setError(error.message || 'Er ging iets mis.'); setStatus('Actie niet gelukt', 'Controleer je Spotify-koppeling en probeer opnieuw.'); } }
   async function waitForSdk() { if (window.Spotify) return; await new Promise((resolve, reject) => { window.onSpotifyWebPlaybackSDKReady = resolve; setTimeout(() => reject(new Error('De Spotify-browserplayer kon niet worden geladen. Controleer je internetverbinding.')), 10_000); }); }
   async function initialisePlayer() { await waitForSdk(); await new Promise((resolve, reject) => { player = new window.Spotify.Player({ name: 'Muziekmix in Safari', getOAuthToken: async callback => { try { callback(await window.SpotifyApp.token()); } catch (error) { reject(error); callback(''); } }, volume: 0.8 }); player.addListener('ready', ({ device_id }) => { browserDeviceId = device_id; resolve(); }); player.addListener('not_ready', () => { browserDeviceId = ''; }); player.addListener('initialization_error', ({ message } = {}) => reject(new Error(`De browser kan de Spotify-player niet starten${message ? `: ${message}` : '.'}`))); player.addListener('authentication_error', ({ message } = {}) => reject(new Error(`Spotify heeft het afspeeltoken geweigerd${message ? `: ${message}` : '. Koppel Spotify opnieuw.'}`))); player.addListener('account_error', ({ message } = {}) => reject(new Error(`De Spotify-browserplayer vereist een geldig Premium-account${message ? `: ${message}` : '.'}`))); player.addListener('playback_error', ({ message } = {}) => setError(`Spotify kon het nummer niet afspelen${message ? `: ${message}` : '.'}`)); player.addListener('autoplay_failed', () => setError('Safari blokkeerde automatisch afspelen. Tik nogmaals op Start afspelen.')); player.addListener('player_state_changed', state => { if (!state) return; playerState = state; stateUpdatedAt = Date.now(); if (currentTrack && state.track_window.current_track.uri === currentTrack.uri) { isPlaying = !state.paused; updateProgress(); } }); player.connect().then(connected => { if (!connected) reject(new Error('Spotify-browserplayer kon niet verbinden.')); }); }); await window.SpotifyApp.request('/me/player', 'PUT', { device_ids: [browserDeviceId], play: false }); }
-  function leaveSession() { clearInterval(progressTimer); player?.disconnect(); sessionStorage.removeItem('muziekmix.session.genre'); window.location.assign('index.html'); }
+  function leaveSession() { clearInterval(progressTimer); player?.disconnect(); sessionStorage.removeItem('muziekmix.session.genre'); sessionStorage.removeItem('muziekmix.session.genres'); window.location.assign('index.html'); }
   function requestSessionExit() { if (!used.size) { leaveSession(); return; } const dialog = $('#exitDialog'); if (typeof dialog.showModal === 'function') dialog.showModal(); else if (window.confirm('Weet je zeker dat je deze sessie wilt verlaten?')) leaveSession(); }
   $('#revealButton').addEventListener('click', () => { if (!currentTrack) return; $('#albumArt').hidden = !$('#albumArt').src; $('#albumFallback').hidden = Boolean($('#albumArt').src); $('.player-card').classList.remove('track-concealed'); $('#revealButton').hidden = true; $('#spotifyTrackLink').hidden = $('#spotifyTrackLink').dataset.available !== 'true'; }); $('#startPlayback').addEventListener('click', () => guarded(playPending)); $('#pauseButton').addEventListener('click', () => guarded(togglePause)); $('#nextButton').addEventListener('click', () => guarded(nextTrack)); $('.back-button').addEventListener('click', event => { event.preventDefault(); requestSessionExit(); }); $('#endSession').addEventListener('click', requestSessionExit); $('#cancelExit').addEventListener('click', () => $('#exitDialog').close()); $('#confirmExit').addEventListener('click', leaveSession);
-  (async () => { if (!genre || !genreNames[genre] || !window.SpotifyApp.hasSession()) { window.location.replace('index.html'); return; } $('#sessionTitle').innerHTML = `${genreNames[genre]}<span>.</span>`; updateCount(); await guarded(async () => { await prepareTrack(); await initialisePlayer(); $('#trackTitle').textContent = 'Klaar om af te spelen'; $('#trackArtist').textContent = 'Tik op de playknop'; $('#trackYear').hidden = true; $('#startPlayback').disabled = false; setStatus('Klaar om af te spelen', 'Tik op de playknop om het eerste nummer te starten.'); }); })();
+  (async () => { if (!selectedGenres.length || !window.SpotifyApp.hasSession()) { window.location.replace('index.html'); return; } $('#sessionTitle').innerHTML = `${sessionGenreLabel()}<span>.</span>`; updateCount(); await guarded(async () => { await prepareTrack(); await initialisePlayer(); $('#trackTitle').textContent = 'Klaar om af te spelen'; $('#trackArtist').textContent = 'Tik op de playknop'; $('#trackYear').hidden = true; $('#startPlayback').disabled = false; setStatus('Klaar om af te spelen', 'Tik op de playknop om het eerste nummer te starten.'); }); })();
 })();
