@@ -846,9 +846,9 @@ window.LIB_V2_NEDERLANDS = [
     ]
   },
   {
-    "title": "Amsterdam",
-    "artist": "FLEMMING",
-    "year": 2021,
+    "title": "Pijnstiller",
+    "artist": "Suzan & Freek",
+    "year": 2026,
     "spotifyUri": "",
     "genres": [
       "nederlands"
