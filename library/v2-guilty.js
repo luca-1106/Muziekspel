@@ -45,9 +45,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Sugar, Sugar",
-    "artist": "The Archies",
-    "year": 1969,
+    "title": "Ob-La-Di, Ob-La-Da",
+    "artist": "The Beatles",
+    "year": 1968,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -171,9 +171,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Y.M.C.A.",
-    "artist": "Village People",
-    "year": 1978,
+    "title": "Yes Sir, I Can Boogie",
+    "artist": "Baccara",
+    "year": 1977,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -189,9 +189,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "My Sharona",
-    "artist": "The Knack",
-    "year": 1979,
+    "title": "Rasputin",
+    "artist": "Boney M.",
+    "year": 1978,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -216,9 +216,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Video Killed the Radio Star",
-    "artist": "The Buggles",
-    "year": 1979,
+    "title": "Tiger Feet",
+    "artist": "Mud",
+    "year": 1974,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -297,9 +297,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Wake Me Up Before You Go-Go",
-    "artist": "Wham!",
-    "year": 1984,
+    "title": "It's Raining Men",
+    "artist": "The Weather Girls",
+    "year": 1982,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -513,9 +513,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Wannabe",
-    "artist": "Spice Girls",
-    "year": 1996,
+    "title": "Saturday Night",
+    "artist": "Whigfield",
+    "year": 1994,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -531,9 +531,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "MMMBop",
-    "artist": "Hanson",
-    "year": 1997,
+    "title": "Mr. Vain",
+    "artist": "Culture Beat",
+    "year": 1993,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -549,17 +549,8 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Livin' la Vida Loca",
-    "artist": "Ricky Martin",
-    "year": 1999,
-    "spotifyUri": "",
-    "genres": [
-      "guilty"
-    ]
-  },
-  {
-    "title": "Believe",
-    "artist": "Cher",
+    "title": "Boom, Boom, Boom, Boom!!",
+    "artist": "Vengaboys",
     "year": 1998,
     "spotifyUri": "",
     "genres": [
@@ -567,9 +558,18 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Man! I Feel Like a Woman!",
-    "artist": "Shania Twain",
-    "year": 1997,
+    "title": "Lambada",
+    "artist": "Kaoma",
+    "year": 1989,
+    "spotifyUri": "",
+    "genres": [
+      "guilty"
+    ]
+  },
+  {
+    "title": "99 Luftballons",
+    "artist": "Nena",
+    "year": 1983,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -711,9 +711,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Happy",
-    "artist": "Pharrell Williams",
-    "year": 2013,
+    "title": "Who Let the Dogs Out",
+    "artist": "Baha Men",
+    "year": 2000,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -738,9 +738,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Cheerleader",
-    "artist": "OMI",
-    "year": 2014,
+    "title": "Because I Got High",
+    "artist": "Afroman",
+    "year": 2001,
     "spotifyUri": "",
     "genres": [
       "guilty"
@@ -846,9 +846,9 @@ window.LIB_V2_GUILTY = [
     ]
   },
   {
-    "title": "Espresso",
-    "artist": "Sabrina Carpenter",
-    "year": 2024,
+    "title": "Made You Look",
+    "artist": "Meghan Trainor",
+    "year": 2022,
     "spotifyUri": "",
     "genres": [
       "guilty"
