@@ -2,7 +2,7 @@
   'use strict';
   const $ = selector => document.querySelector(selector);
   const genre = sessionStorage.getItem('muziekmix.session.genre');
-  const genreNames = { alles: 'Alle genres', yachterock: 'Yachtrock', rock: 'Rock', disco: 'Disco', gitaarmuziek: 'Gitaarmuziek', nederlands: 'Nederlands', pop: 'Pop', soul: 'Soul & R&B', hiphop: 'Hiphop', dance: 'Dance & Electronic', country: 'Country & Folk' };
+  const genreNames = { alles: 'Alle genres', pop: 'Pop', rock: 'Rock', nederlands: 'Nederlandstalig', guilty: 'Guilty Pleasures', yachterock: 'Yachtrock', soul: 'Soul & R&B', funkdisco: 'Funk & Disco', country: 'Country & Folk', gitaarmuziek: 'Gitaarmuziek', bluesjazzswing: 'Blues, Jazz & Swing' };
   const sourceTracks = Array.isArray(window.TRACKS) ? window.TRACKS.filter(track => track?.title && track?.artist) : [];
   const key = track => `${track.title}\u0000${track.artist}`.toLowerCase();
   const normalise = value => String(value || '').toLocaleLowerCase('nl').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
@@ -14,7 +14,7 @@
     .replace(/\s+/g, ' ').trim();
   const normaliseArtist = value => normalise(value).replace(/^the\s+/, '').replace(/\s+(feat|featuring|ft)\s+.*$/, '').trim();
   const overlap = (left, right) => { const wanted = new Set(left.split(' ').filter(Boolean)); const found = new Set(right.split(' ').filter(Boolean)); return wanted.size ? [...wanted].filter(word => found.has(word)).length / wanted.size : 0; };
-    const fallbackGenre = { yachterock: 'pop', rock: 'gitaarmuziek', disco: 'dance', gitaarmuziek: 'rock', nederlands: 'pop', pop: 'soul', soul: 'pop', hiphop: 'soul', dance: 'disco', country: 'yachterock' };
+    const fallbackGenre = { yachterock: 'pop', rock: 'gitaarmuziek', gitaarmuziek: 'rock', nederlands: 'pop', pop: 'guilty', guilty: 'pop', soul: 'funkdisco', funkdisco: 'soul', country: 'gitaarmuziek', bluesjazzswing: 'soul' };
   let activeGenre = genre;
   const tracksForGenre = selected => [...new Map(sourceTracks.filter(track => selected === 'alles' || (Array.isArray(track.genres) ? track.genres.includes(selected) : track.genre === selected)).map(track => [key(track), track])).values()];
   let tracks = tracksForGenre(activeGenre);
