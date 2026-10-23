@@ -738,9 +738,9 @@ window.LIB_V2_FUNKDISCO = [
     ]
   },
   {
-    "title": "Blurred Lines",
-    "artist": "Robin Thicke feat. T.I. & Pharrell",
-    "year": 2013,
+    "title": "Groovejet (If This Ain't Love)",
+    "artist": "Spiller feat. Sophie Ellis-Bextor",
+    "year": 2000,
     "spotifyUri": "",
     "genres": [
       "funkdisco"
@@ -774,9 +774,9 @@ window.LIB_V2_FUNKDISCO = [
     ]
   },
   {
-    "title": "Lose Yourself to Dance",
-    "artist": "Daft Punk feat. Pharrell Williams",
-    "year": 2013,
+    "title": "Hey Ya!",
+    "artist": "Outkast",
+    "year": 2003,
     "spotifyUri": "",
     "genres": [
       "funkdisco"
