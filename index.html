@@ -3,16 +3,35 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#121411"><meta name="description" content="Start een Spotify-sessie per muziekgenre.">
-  <title>Muziekmix</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css?v=match-fix-1"><link rel="stylesheet" href="ui.css?v=genre-dropdown-1">
+  <title>Muziekmix</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css?v=match-fix-1"><link rel="stylesheet" href="ui.css?v=multi-genre-2">
 </head>
 <body class="landing-page">
   <main class="app-shell">
     <header class="topbar"><div class="brand-mark" aria-hidden="true">♫</div><div><p class="eyebrow">JOUW EIGEN MUZIEKMIX</p><h1>Muziekmix<span>.</span></h1></div></header>
     <section class="intro" aria-live="polite"><div class="status-line"><span id="statusDot" class="status-dot"></span><span id="statusText">Klaar voor een nieuwe sessie.</span></div><p id="instruction">Kies een genre, koppel Spotify en start je sessie.</p></section>
     <section class="connection-card" aria-label="Spotify-verbinding"><div id="connectionIcon" class="connection-icon" aria-hidden="true">♫</div><div class="connection-copy"><strong id="spotifyConnection">Spotify niet gekoppeld</strong><span id="connectionDetail">Koppel je eigen account om af te spelen.</span></div><button id="connectSpotify" class="secondary-button compact-button" type="button">Koppelen</button><button id="disconnectSpotify" class="text-button" type="button" hidden>Ontkoppel</button></section>
-    <section class="genre-picker" aria-label="Kies een muziekgenre"><div class="genre-heading"><span class="eyebrow">KIES JE MUZIEK</span><span id="genreCount" class="genre-count"></span></div><div class="genre-select-wrap"><span class="genre-select-icon" aria-hidden="true">♫</span><select id="genreSelect" class="genre-select" aria-label="Kies een muziekgenre"><option value="alles">Alles — alle genres</option><option value="pop">Pop</option><option value="rock">Rock</option><option value="nederlands">Nederlandstalig</option><option value="guilty">Guilty Pleasures</option><option value="yachterock">Yachtrock</option><option value="soul">Soul &amp; R&amp;B</option><option value="funkdisco">Funk &amp; Disco</option><option value="country">Country &amp; Folk</option><option value="gitaarmuziek">Gitaarmuziek</option><option value="bluesjazzswing">Blues, Jazz &amp; Swing</option></select><svg class="genre-chevron" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div></section>
-    <section class="start-card"><div class="vinyl small-vinyl" aria-hidden="true"><div class="vinyl-label">♫</div></div><h2>Start een sessie</h2><p>Er wordt alleen uit je gekozen genre gespeeld. Een nummer komt niet twee keer voorbij in dezelfde sessie.</p><button id="startSession" class="primary-button full-button" type="button"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 5v14l11-7z"/></svg></span><span>Start sessie</span></button><p id="errorMessage" class="error-message" role="alert" hidden></p></section>
+    <section class="genre-picker" aria-label="Kies een muziekgenre"><div class="genre-heading"><span class="eyebrow">KIES JE MUZIEK</span><span id="genreCount" class="genre-count"></span></div><div class="genre-multi">
+  <button id="genreToggle" class="genre-select-wrap genre-multi-toggle" type="button" aria-expanded="false" aria-controls="genreMenu">
+    <span class="genre-select-icon" aria-hidden="true">♫</span>
+    <span id="genreSelectionText" class="genre-selection-text">Alle genres</span>
+    <svg class="genre-chevron" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+  <div id="genreMenu" class="genre-menu" hidden>
+    <label class="genre-option"><input type="checkbox" value="alles" checked><span>Alles — alle genres</span></label>
+    <label class="genre-option"><input type="checkbox" value="pop"><span>Pop</span></label>
+    <label class="genre-option"><input type="checkbox" value="rock"><span>Rock</span></label>
+    <label class="genre-option"><input type="checkbox" value="nederlands"><span>Nederlandstalig</span></label>
+    <label class="genre-option"><input type="checkbox" value="guilty"><span>Guilty Pleasures</span></label>
+    <label class="genre-option"><input type="checkbox" value="yachterock"><span>Yachtrock</span></label>
+    <label class="genre-option"><input type="checkbox" value="soul"><span>Soul &amp; R&amp;B</span></label>
+    <label class="genre-option"><input type="checkbox" value="funkdisco"><span>Funk &amp; Disco</span></label>
+    <label class="genre-option"><input type="checkbox" value="country"><span>Country &amp; Folk</span></label>
+    <label class="genre-option"><input type="checkbox" value="gitaarmuziek"><span>Gitaarmuziek</span></label>
+    <label class="genre-option"><input type="checkbox" value="bluesjazzswing"><span>Blues, Jazz &amp; Swing</span></label>
+  </div>
+</div></section>
+    <section class="start-card"><div class="vinyl small-vinyl" aria-hidden="true"><div class="vinyl-label">♫</div></div><h2>Start een sessie</h2><p>Er wordt alleen uit je gekozen genres gespeeld. Een nummer komt niet twee keer voorbij in dezelfde sessie.</p><button id="startSession" class="primary-button full-button" type="button"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 5v14l11-7z"/></svg></span><span>Start sessie</span></button><p id="errorMessage" class="error-message" role="alert" hidden></p></section>
   </main>
-  <script src="config.js?v=player-auth-1"></script><script src="tracks.js?v=empty-library-1"></script><script src="spotify.js?v=player-auth-1"></script><script src="app.js?v=genre-reset-2"></script>
+  <script src="config.js?v=player-auth-1"></script><script src="tracks.js?v=empty-library-1"></script><script src="spotify.js?v=player-auth-1"></script><script src="app.js?v=multi-genre-3"></script>
 </body>
 </html>
