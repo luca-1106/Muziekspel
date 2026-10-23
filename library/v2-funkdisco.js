@@ -207,9 +207,9 @@ window.LIB_V2_FUNKDISCO = [
     ]
   },
   {
-    "title": "Hot Stuff",
+    "title": "Last Dance",
     "artist": "Donna Summer",
-    "year": 1979,
+    "year": 1978,
     "spotifyUri": "",
     "genres": [
       "funkdisco"
@@ -225,7 +225,7 @@ window.LIB_V2_FUNKDISCO = [
     ]
   },
   {
-    "title": "We Are Family",
+    "title": "Lost in Music",
     "artist": "Sister Sledge",
     "year": 1979,
     "spotifyUri": "",
@@ -657,9 +657,9 @@ window.LIB_V2_FUNKDISCO = [
     ]
   },
   {
-    "title": "Crazy in Love",
-    "artist": "Beyoncé feat. Jay-Z",
-    "year": 2003,
+    "title": "Music",
+    "artist": "Madonna",
+    "year": 2000,
     "spotifyUri": "",
     "genres": [
       "funkdisco"
@@ -702,9 +702,9 @@ window.LIB_V2_FUNKDISCO = [
     ]
   },
   {
-    "title": "American Boy",
-    "artist": "Estelle feat. Kanye West",
-    "year": 2008,
+    "title": "Valerie",
+    "artist": "Mark Ronson feat. Amy Winehouse",
+    "year": 2007,
     "spotifyUri": "",
     "genres": [
       "funkdisco"
@@ -729,9 +729,9 @@ window.LIB_V2_FUNKDISCO = [
     ]
   },
   {
-    "title": "Happy",
-    "artist": "Pharrell Williams",
-    "year": 2013,
+    "title": "Love Generation",
+    "artist": "Bob Sinclar feat. Gary Pine",
+    "year": 2005,
     "spotifyUri": "",
     "genres": [
       "funkdisco"
@@ -855,7 +855,7 @@ window.LIB_V2_FUNKDISCO = [
     ]
   },
   {
-    "title": "Leave the Door Open",
+    "title": "Skate",
     "artist": "Silk Sonic",
     "year": 2021,
     "spotifyUri": "",
