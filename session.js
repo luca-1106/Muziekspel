@@ -56,12 +56,14 @@
     const combinedArtists = normaliseArtist(item.artists?.map(person => person.name).join(' ') || '');
     const titleMatch = wantedTitle === foundTitle ? 100 : (overlap(wantedTitle, foundTitle) >= 0.8 && overlap(foundTitle, wantedTitle) >= 0.6 ? 70 : 0);
     const artistMatch = artistNames.includes(wantedArtist) || combinedArtists === wantedArtist ? 50 : (overlap(wantedArtist, combinedArtists) >= 0.8 && overlap(combinedArtists, wantedArtist) >= 0.6 ? 35 : 0);
-    const unwantedVersion = /(live|karaoke|tribute|cover|instrumental|re recorded)/.test(normalise(`${item.name} ${item.album?.name || ''}`)) && !/(live|karaoke|tribute|cover|instrumental|re recorded)/.test(wantedTitle);
+    const candidateVersionText = normalise(`${item.name} ${item.album?.name || ''}`);
+    const unwantedVersion = /(live|karaoke|tribute|cover|instrumental|re recorded)/.test(candidateVersionText) && !/(live|karaoke|tribute|cover|instrumental|re recorded)/.test(wantedTitle);
+    const extendedVersion = /(extended(?: version| mix)?|12 inch(?: version| mix)?|12in(?:ch)?(?: version| mix)?|long version|long mix|maxi(?: version| mix)?|club mix|full length version)/.test(candidateVersionText);
     const wantedYear = Number(source.year) || 0;
     const foundYear = Number(String(item.album?.release_date || '').match(/\d{4}/)?.[0]) || 0;
     const yearDifference = wantedYear && foundYear ? Math.abs(wantedYear - foundYear) : Infinity;
     const yearMatch = yearDifference === 0 ? 40 : yearDifference === 1 ? 30 : yearDifference === 2 ? 20 : yearDifference <= 5 ? 10 : 0;
-    return titleMatch && artistMatch && !unwantedVersion ? titleMatch + artistMatch + yearMatch : -Infinity;
+    return titleMatch && artistMatch && !unwantedVersion && !extendedVersion ? titleMatch + artistMatch + yearMatch : -Infinity;
   }
   async function resolve(source) {
     if (source.spotifyUri?.startsWith('spotify:track:')) return window.SpotifyApp.request(`/tracks/${encodeURIComponent(source.spotifyUri.slice(14))}`);
