@@ -29,7 +29,7 @@
   const overlap = (left, right) => { const wanted = new Set(left.split(' ').filter(Boolean)); const found = new Set(right.split(' ').filter(Boolean)); return wanted.size ? [...wanted].filter(word => found.has(word)).length / wanted.size : 0; };
   const tracksForGenres = selected => {
     const all = selected.includes('alles');
-    const matching = all ? sourceTracks : sourceTracks.filter(track => {
+    const matching = all ? sourceTracks.filter(track => track.includeInAll !== false) : sourceTracks.filter(track => {
       const genres = Array.isArray(track.genres) ? track.genres : [track.genre].filter(Boolean);
       return genres.some(genre => selected.includes(genre));
     });
