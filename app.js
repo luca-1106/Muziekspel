@@ -15,7 +15,7 @@
   };
   const pool = () => {
     const all = selectedGenres.includes('alles');
-    const matching = all ? tracks : tracks.filter(track => {
+    const matching = all ? tracks.filter(track => track.includeInAll !== false) : tracks.filter(track => {
       const genres = Array.isArray(track.genres) ? track.genres : [track.genre].filter(Boolean);
       return genres.some(genre => selectedGenres.includes(genre));
     });
